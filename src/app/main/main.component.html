@@ -1,0 +1,51 @@
+<div class="main-container">
+    <div class="main-wrapper">
+        <app-header
+            [enableControls]="enableControls" [didPlayerWin]="didPlayerWin" 
+            [darkMode]="darkMode" [wordLength]="wordLength"
+            (toggleDarkModeEmitter)="toggleDarkMode()"
+            (switchGameModeEmitter)="switchGameMode()"
+            (resetKeyboardPositionEmitter)="resetKeyboardPosition()"
+        ></app-header>
+        <main class="guesses">
+            <ul>
+                <li [class.word6]="wordLength === 6" class='old-guess'
+                    *ngFor="let guessedWord of guesses; let i = index">
+                    <span class="attempt-number">{{i+1}}</span>
+                    <div [@flip] [ngClass]="guess.state" class='old-guess' *ngFor="let guess of guessedWord">
+                        {{ guess.letter }}
+                    </div>
+                </li>
+                <li [class.word6]="wordLength === 6" #nextGuessWrapper *ngIf='showNextGuessRow' class='next-guess'>
+                    <span (click)='resetNextGuess()' class="clear-guess">🗑️</span>
+                    <div [class.marker]='nextGuess[0]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[0]?.letter }}</div>
+                    <div [class.marker]='nextGuess[1]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[1]?.letter }}</div>
+                    <div [class.marker]='nextGuess[2]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[2]?.letter }}</div>
+                    <div [class.marker]='nextGuess[3]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[3]?.letter }}</div>
+                    <div [class.marker]='nextGuess[4]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[4]?.letter }}</div>
+                    <div [class.marker]='nextGuess[5]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)" *ngIf="wordLength === 6">{{ nextGuess[5]?.letter }}</div>
+                    <span *ngIf='guesses.length > 3' (click)='helppp()' class="sos">🆘</span>
+                </li>
+            </ul>
+            <div *ngIf="showShare">
+                <button (click)='shareScore()' class="share">
+                    Share
+                    <img src="/assets/icons/share.svg">
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <footer [class.show-on-top]="showFooterOnTop" *ngIf='enableControls && !showShare' (click)="focusFooter()">
+        <app-keyboard 
+            (enterClickedEmitter)="enterClicked()" 
+            (letterClickedEmitter)="letterClicked($event)"
+            (backspaceClickedEmitter)="backspaceClicked()"
+            [yellow]='colorMarkingSets.yellow'
+            [dark]='colorMarkingSets.dark'
+            [green]='colorMarkingSets.green'
+            [nextGuess]='nextGuess'
+        ></app-keyboard>
+    </footer>
+    <div *ngIf='didPlayerWin' class="win-image"></div>
+</div>

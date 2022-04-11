@@ -1,0 +1,173 @@
+.win-container{
+  --bottom-bar-color: #000d5e;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  margin: 0 auto;
+  border-radius: 1rem;
+  box-shadow: 0 0 0.25rem 0.25rem;
+
+  .top-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem 0;
+    padding: 1rem 2rem;
+    align-items: center;
+    background: var(--bg-color-dialog);
+    border-radius: 1rem 1rem 0 0;
+    width: fit-content;
+    margin: 0 auto;
+    position: relative;
+
+
+    button.close{    
+      position: absolute;
+      right: 0.75em;
+      top: 0.75em;
+      border: none;
+      background: transparent;
+      font-size: 1.25rem;
+      color: var(--text-color);  
+    }
+    
+    h3{
+      user-select: none;
+      display: inline;
+      padding: .5rem;
+      border-radius: 1rem;
+      margin: 0;
+    }
+    
+    button{
+      cursor: pointer;
+      outline: none;
+    }
+    
+    .challenge-wrapper{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 0.5rem;
+      width: 100%;
+      font-size: 1.2rem;
+      position: relative;
+
+      button.challenge{
+        position: relative;
+        padding: 0.5rem 1rem;
+        background: none;
+        border: 0;
+        font-size: inherit;
+        transition: color 1s;
+        color: red;
+        box-shadow: inset 0 0 0 .25rem red; // Using inset box-shadow instead of border for sizing simplicity
+        
+        &:hover{
+          background: red;
+          color: white;
+        }
+      
+        &::before,
+        &::after {
+          box-sizing: inherit;
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 0;
+          border: .25rem solid transparent;
+        }
+
+        // This covers the top & right borders (expands right, then down)
+        &::before {
+          top: 0;
+          left: 0;
+        }
+      
+        // And this the bottom & left borders (expands left, then up)
+        &::after {
+          bottom: 0;
+          right: 0;
+        }
+        
+        &.hover {
+          color: green;
+        }
+      
+        &.hover::before,
+        &.hover::after {
+          width: 100%;
+          height: 100%;
+        }
+      
+        &.hover::before {
+          border-top-color: green; // Make borders visible
+          border-right-color: green;
+          transition:
+            width 0.25s ease-out, // Width expands first
+            height 0.25s ease-out 0.25s; // And then height
+        }
+      
+        &.hover::after {
+          border-bottom-color: green; // Make borders visible
+          border-left-color: green;
+          transition:
+            border-color 0s ease-out 0.5s, // Wait for ::before to finish before showing border
+            width 0.25s ease-out 0.5s, // And then extending width
+            height 0.25s ease-out 0.75s; // And finally height   
+        }
+      }
+      .unwanted-word{
+        line-height: 2.5rem;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .bottom-wrapper{
+    display: flex;
+    padding: 2rem;
+    justify-content: space-between;
+    border-radius: 0 0 1rem 1rem;
+    font-size: 1rem;
+    background: var(--bottom-bar-color);
+    
+    
+    .next-word{
+      
+      .time{
+        margin-top: 0.25rem;
+        font-size: 1.5rem;
+      }
+    }
+    button.share{
+      font-size: 1rem;
+      align-self: end;
+      box-shadow: 0 0 5px 2px gold;
+      background: palegoldenrod;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.75rem;
+      border: none;
+      cursor: pointer;
+      &:hover{
+        box-shadow: 0 0 5px 5px gold;
+      }
+
+      img{
+        color: white;
+        height: 1rem;
+        width: 1rem;
+        vertical-align: middle;   
+      } 
+    }
+  }
+}
+
+@media(max-width: 500px){
+  .win-container{
+    .top-wrapper{
+      .challenge-wrapper{
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+    } 
+  }  
+}

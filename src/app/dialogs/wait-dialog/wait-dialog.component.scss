@@ -1,0 +1,39 @@
+.wait-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    position: relative;
+    height: 60vh;
+    max-width: 40rem;
+    margin: 0 auto;
+    background-color: var(--bg-color-dialog);
+    color: var(--color-dialog);
+    padding: 2rem 4rem;
+    border-radius: 0.75rem;
+    box-shadow: inset 0 0 0.25rem 0.25rem #55f;
+
+
+    button{
+        position: absolute;
+        right: 0.75em;
+        top: 0.75em;
+        border: none;
+        background: transparent;
+        font-size: 1.25rem;
+        cursor: pointer;
+        outline: none;  
+        color: var(--text-color);  
+    }
+
+    div{
+        &:first-child{
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        div.time-to-next-word{
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+    }
+}

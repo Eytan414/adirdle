@@ -1,0 +1,290 @@
+
+body{
+    --app-title-color: #55f;
+    --app-lightblue: #71d4fe;
+    --app-scrollbar-bg-color: #c4c4c4;
+    --text-color-dark: #2f3336;
+    --text-color: var(--text-color-dark);
+    --text-color-dialog: #333;
+    --text-color-keys:#acff8e;
+    --bg-color: #fff7d2;
+    --bg-color-dialog: azure;
+    --bg-color-keyboard: #aaa;
+    --bg-color-keys:#555;
+    --mom-shadow-color: rgb(255, 50, 231);
+    --default-box-shadow: inset 0px 0px 12px 8px #000000b3;
+    --marked-box-shadow: 0 0 8px 1px var(--mom-shadow-color);
+    --hover-shadow-keys: #00bcd4e6;
+    
+    background:var(--bg-color);
+    color: var(--text-color);
+    overflow: hidden;
+    margin: 0;
+    
+    &.dark-mode-on{
+        --mobile-box-shadow: 0 0 8px .5px #fff7d2b3;
+        --default-box-shadow: 0 0 8px 1px #fff7d2b3;
+        --bg-color: #1a1a1a;
+        --text-color: #fff7d2;
+        --text-color-dialog: #ccc;    
+        --text-color-keys:var(--app-lightblue);
+        --bg-color-dialog: #2b2b2b;
+        --bg-color-keyboard: #272b2c;
+        --bg-color-keys: #444;
+    }
+
+    *{
+        user-select: none;
+        font-family: Arial, Helvetica, sans-serif;
+        transition: all .15s ease-out;
+        outline: none;
+    }
+}
+
+.cdk-overlay-container{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 10%;
+    z-index: 9;
+
+    .cdk-overlay-pane {
+        text-align: center;
+        max-width: 100vw !important;
+        font-size: 1.5rem;
+
+        &.no-word-dialog {
+            color: red;
+        }
+        &.win-dialog {
+            color: rgb(3, 148, 3);
+        }
+        .mat-dialog-container{
+            padding: 1rem;
+        }
+        .snackbar{
+            margin: 0 auto;
+            background: darkslategrey;
+            color: wheat;
+            display: flex;
+            justify-content: center;
+            
+            .mat-simple-snackbar{
+                font-size: 1rem;
+                button{
+                    background: transparent;
+                    color: var(--mom-shadow-color);
+                    box-shadow: inset 0 0 2px 2px var(--mom-shadow-color);
+                    margin-left: 1rem;
+                }
+
+            }
+
+        }
+    }
+}
+
+.main-container{
+    height: 100vh;
+    max-height: 100vh;
+    width: 100vw;
+    display: flex;
+    gap: 0.25rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+
+    main.guesses{
+        overflow: hidden auto;
+        max-height: 50vh;
+        padding: 0 2rem 1rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        z-index: 0;
+        background: var(--bg-color);
+        
+        &::-webkit-scrollbar-track {
+            border-radius: 4px;
+            margin: 2rem 0;
+        }
+        
+        &::-webkit-scrollbar {
+            width: 0.25rem;
+        }
+        &::-webkit-scrollbar-thumb {
+            padding: 0 10px;    
+            width: 3px;
+            min-height: 25%;
+            border-radius: 4px;
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+            background-color: var(--app-scrollbar-bg-color);
+        } 
+
+        ul{
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding-inline-start: 0;
+
+            li {
+                position: relative;
+                display: flex;
+                gap: 1.5rem;
+
+                span.attempt-number{
+                    position: absolute;
+                    top: calc(50% - 0.5rem);
+                    left: -2rem;
+                    width: 1.5rem;
+                    text-align: center;
+                }
+                div{
+                    height: min(calc((100vw - 12rem) / 5), 5rem);
+                    width: min(calc((100vw - 12rem) / 5), 5rem);                    
+                    font-size: 2rem;
+                    box-shadow: var(--default-box-shadow);
+                    background: var(--text-color-dark);
+                    color: var(--app-lightblue);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    text-transform: capitalize;
+
+                    &.checked{
+                        color: white;
+                    }
+                    &.correct{
+                        background: yellow;
+                        color: var(--text-color-dark);
+                    }
+                    &.bullseye{
+                        background: #0f0;
+                        color: var(--text-color-dark);
+                    }
+                }
+
+                &.word6{
+                    div{
+                        
+                        height: calc((100vw - 14rem) / 6);
+                        // width: calc((100vw - 14rem) / 6);
+                        height: min(calc((100vw - 14rem) / 6), 5rem);                    
+                        width: min(calc((100vw - 14rem) / 6), 5rem);                    
+                  
+                    }
+                }
+            }
+            li.next-guess{
+                position: sticky;
+                bottom: 0rem;
+                span{
+                    position: absolute;
+                    top: 50%;
+                    cursor: pointer;
+                    transform: translateY(-50%);
+                    font-size: 2rem;
+
+                    &.clear-guess{
+                        left: -3rem;
+                    }
+                    &.sos{
+                        right: -3rem;
+                    }
+                }
+                div{
+                    background: #555;
+                    font-size: min(5vw, 2.5rem);
+                    &.marker{
+                        box-shadow: var(--marked-box-shadow);
+                    }
+                }  
+            }
+        }
+
+        button.share{
+            font-size: 1rem;
+            align-self: end;
+            box-shadow: 0 0 5px 2px gold;
+            background: palegoldenrod;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.75rem;
+            border: none;
+            cursor: pointer;
+            &:hover{
+              box-shadow: 0 0 5px 5px gold;
+            }
+      
+            img{
+              color: white;
+              height: 1rem;
+              width: 1rem;
+              vertical-align: middle;   
+            } 
+        }
+    }
+    .main-wrapper{
+        z-index: 1;
+    }
+    footer{
+        position: fixed;
+        bottom: 0;
+        z-index: 0;
+        &.show-on-top{
+            z-index: 2;
+        }
+        span {
+            user-select: none;
+        }
+
+    }
+    .win-image{
+        height: 100%;
+        width: 100%;
+        background-size: contain;
+        background-image: url(/assets/images/rocknroll.png);
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}
+
+
+@media (max-width:500px) { 
+    .main-container {
+        main.guesses ul li{
+            gap: 0.75rem;
+            &.next-guess span{
+                &.clear-guess{
+                    left: -2.5rem;
+                }
+                &.sos{
+                    right: -2.5rem;
+                }
+            }
+            span{
+                font-size: 1.5rem !important;
+            }   
+            div{
+                height: calc(calc(100vw - 8rem) / 5);
+                width: calc(calc(100vw - 8rem) / 5);
+                font-size: 1.75rem;
+            }
+            &.word6{
+                div{
+                    height: calc((100vw - 10rem) / 6);
+                    width: calc((100vw - 10rem) / 6);
+                }
+            }
+        }
+    }
+    .dark-mode-on{
+        .main-container main.guesses ul li div{
+            box-shadow: var(--mobile-box-shadow);
+        }
+    }
+
+}

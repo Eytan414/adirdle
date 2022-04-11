@@ -1,0 +1,10 @@
+<li [ngClass]="{'word6': wordLength === 6}" *ngIf='showNextGuessRow' class='next-guess'>
+    <span (click)='clearGuess()' class="clear-guess">🗑️</span>
+    <div (click)="letterSlotClicked($event)">{{ nextGuess[0]?.letter }}</div>
+    <div (click)="letterSlotClicked($event)">{{ nextGuess[1]?.letter }}</div>
+    <div (click)="letterSlotClicked($event)">{{ nextGuess[2]?.letter }}</div>
+    <div (click)="letterSlotClicked($event)">{{ nextGuess[3]?.letter }}</div>
+    <div (click)="letterSlotClicked($event)">{{ nextGuess[4]?.letter }}</div>
+    <div (click)="letterSlotClicked($event)" *ngIf="wordLength === 6">{{ nextGuess[5]?.letter }}</div>
+    <span *ngIf='guesses.length > 3' (click)='helppp()' class="sos">🆘</span>
+</li>

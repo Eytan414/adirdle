@@ -1,0 +1,46 @@
+<div #keyboard cdkDrag (cdkDragEnded)="dragEnd($event)" class="keyboard" [cdkDragFreeDragPosition]="dragPosition">
+    <div #keyboard class="actions">
+        <div (click)='enlarge()' class="enlarge">+</div>
+        <div class="handle" cdkDragHandle>
+            <svg  fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M18 11h-5V6h3l-4-4-4 4h3v5H6V8l-4 4 4 4v-3h5v5H8l4 4 4-4h-3v-5h5v3l4-4-4-4z"/></svg>
+        </div>
+        <div (click)='lockKeyboardPosition()' class="lock">🔒</div>
+        <div (click)='shrink()' class="shrink">–</div>
+    </div>
+        
+    <div class="line1">
+        <span [ngClass]='calcCssClass("q")' (click)='letterClicked("q")'>Q</span>
+        <span [ngClass]='calcCssClass("w")' (click)='letterClicked("w")'>W</span>
+        <span [ngClass]='calcCssClass("e")' (click)='letterClicked("e")'>E</span>
+        <span [ngClass]='calcCssClass("r")' (click)='letterClicked("r")'>R</span>
+        <span [ngClass]='calcCssClass("t")' (click)='letterClicked("t")'>T</span>
+        <span [ngClass]='calcCssClass("y")' (click)='letterClicked("y")'>Y</span>
+        <span [ngClass]='calcCssClass("u")' (click)='letterClicked("u")'>U</span>
+        <span [ngClass]='calcCssClass("i")' (click)='letterClicked("i")'>I</span>
+        <span [ngClass]='calcCssClass("o")' (click)='letterClicked("o")'>O</span>
+        <span [ngClass]='calcCssClass("p")' (click)='letterClicked("p")'>P</span>
+    </div>
+    <div class="line2">
+        <div (click)='unlockKeyboardPosition()' class="unlock">🔓</div>
+        <span [ngClass]='calcCssClass("a")' (click)='letterClicked("a")'>A</span>
+        <span [ngClass]='calcCssClass("s")' (click)='letterClicked("s")'>S</span>
+        <span [ngClass]='calcCssClass("d")' (click)='letterClicked("d")'>D</span>
+        <span [ngClass]='calcCssClass("f")' (click)='letterClicked("f")'>F</span>
+        <span [ngClass]='calcCssClass("g")' (click)='letterClicked("g")'>G</span>
+        <span [ngClass]='calcCssClass("h")' (click)='letterClicked("h")'>H</span>
+        <span [ngClass]='calcCssClass("j")' (click)='letterClicked("j")'>J</span>
+        <span [ngClass]='calcCssClass("k")' (click)='letterClicked("k")'>K</span>
+        <span [ngClass]='calcCssClass("l")' (click)='letterClicked("l")'>L</span>
+    </div>
+    <div class="line3">
+        <span (click)='backspaceClicked()'>⌫</span>
+        <span [ngClass]='calcCssClass("z")' (click)='letterClicked("z")'>Z</span>
+        <span [ngClass]='calcCssClass("x")' (click)='letterClicked("x")'>X</span>
+        <span [ngClass]='calcCssClass("c")' (click)='letterClicked("c")'>C</span>
+        <span [ngClass]='calcCssClass("v")' (click)='letterClicked("v")'>V</span>
+        <span [ngClass]='calcCssClass("b")' (click)='letterClicked("b")'>B</span>
+        <span [ngClass]='calcCssClass("n")' (click)='letterClicked("n")'>N</span>
+        <span [ngClass]='calcCssClass("m")' (click)='letterClicked("m")'>M</span>
+        <span (click)='enterClicked()'>↩</span>
+    </div>
+</div>

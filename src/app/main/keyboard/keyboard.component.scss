@@ -1,0 +1,165 @@
+.keyboard {
+    --size: 2rem;
+    border-radius: 1rem;
+    background: var(--bg-color-keyboard);
+    display: flex;
+    flex-direction: column;
+    padding: 0.25em 0.8em;
+    margin: 0 auto 0.25rem;
+    font-size: var(--size);
+    box-shadow: 0px 0px 10px rgb(0 0 0 / 40%);
+    position: relative;
+    max-width: 80vw;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    &.locked-to-bottom{
+        margin: 0 auto;
+        transform: none !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;    
+        right: 0;
+
+        .actions{
+            display: none;
+        }
+        .line2{
+            .unlock{
+                display: block;
+            }
+        }
+    }
+    .actions{
+        position: absolute;
+        top: -2rem;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        background: var(--bg-color-keyboard);
+        border-radius: 1rem;
+        &>*{
+            user-select: auto;
+            border-radius: 1rem;
+            height: 1.5rem;
+            width: 1.5rem;
+            text-align: center;
+            color: var(--text-color-keys);
+
+            &:hover{
+                background-color: #476378;
+            }
+            svg{
+                height: 1.5rem;
+                width: 1.5rem;
+            }
+        }
+        .shrink{
+            line-height: 1.4rem;
+        }
+        .lock{
+            font-size: 1rem;
+        }
+    }
+
+    .line1, .line2, .line3{
+        span{
+            &.dark{
+                background: #111;
+            }
+            &.yellow{
+                background: yellow;
+                color: var(--text-color-dark);
+            }
+            &.green{
+                background: green; 
+            }
+        }
+    }
+    // span {
+    //     user-select: none;
+    // }
+
+}
+
+div[class*='line'] {
+    display: flex;
+    justify-content: space-around;
+}        
+div[class*='line'] + div[class*='line'] {
+    margin-top: .25rem;
+}        
+.line1, .line3 {
+    padding: 0 .5rem;
+}
+.line2 {
+    padding: 0 30px;
+    .unlock{
+        display: none;
+        align-self: center;
+        position: relative;
+        left: -0.75rem;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+}
+
+div[class*='line'] span {
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, .7);
+    min-width: 2rem;
+    padding: 0.25em ;
+    margin: 0.33em 0.15em;
+    background: var(--bg-color-keys);
+    color: var(--text-color-keys);
+    border-radius: 0.6rem;
+    text-shadow: 0px 0px 1rem var(--app-lightblue), 
+        0px 0px 3rem var(--app-lightblue);
+    text-align: center;
+    align-self: center;
+
+    &:active{
+        transform: translateY(-.4em) scale(1.2);
+    }
+}
+
+div[class*='line'] span:hover {
+    cursor: pointer;
+    background: var(--text-color-dark);
+    text-shadow: 0 0 30px var(--app-lightblue), 
+        0 0 30px var(--hover-shadow-keys), 
+        0 0 30px var(--hover-shadow-keys), 
+        0 0 30px var(--hover-shadow-keys);
+}
+.line3 span:first-of-type,
+.line3 span:last-of-type {
+    display: inline-flex;
+    justify-content: center;
+    line-height: 2.5rem;
+}
+
+/*********************
+/////// MOBILE ///////
+*********************/
+
+@media (min-width:768px) { 
+    .keyboard{
+        max-width: 50vw;
+    }
+}
+@media (max-width:500px) { 
+    .keyboard {
+        --size: 1.2rem;
+        max-width: 95vw;
+        padding: 0.3em;
+    }
+    div[class*='line'] span {
+        min-width: 1.2rem;
+        margin: 0.2rem;
+    }
+}

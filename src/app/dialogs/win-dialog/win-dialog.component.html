@@ -1,0 +1,33 @@
+<div class="win-container">
+    <div class="top-wrapper">
+        <button class="close" mat-button [mat-dialog-close]>✖</button>
+        
+        <h3>Way to go! Congratulations!!</h3>
+        <h3>
+            Secret word: <strong>{{data.dailyWord | uppercase}}</strong> found in {{data.guesses.length}} guesses
+        </h3>
+
+        <div class='challenge-wrapper'>
+            <div class="unwanted-word">Unwanted word?</div>
+            <button class="challenge" [ngClass]="{'hover': hover}" 
+                (touchstart)="startConfirmation()" 
+                (touchend)="endConfirmation()"
+                (touchmove)="touchmove($event)"
+                (mouseleave)="killTimeout()" 
+                (mousedown)="startConfirmation()"
+                (mouseup)="endConfirmation()" >
+                Remove from list
+            </button>
+        </div>
+    </div>
+    <div class="bottom-wrapper">
+        <div class='next-word'>
+            <div>Next Word in:</div>
+            <div class='time'>{{timeToNextWord}}</div>
+        </div>
+        <button (click)='shareScore()' class="share">
+            Share
+            <img src="/assets/icons/share.svg">
+        </button>
+    </div>
+</div>

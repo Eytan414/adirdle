@@ -1,0 +1,16 @@
+<div class="no-word-container" >
+    <button class="close" mat-button [mat-dialog-close]>✖</button>
+    
+    <h3>⚠️Alert⚠️</h3>
+    <h3>Word <strong>"{{data.guess | uppercase}}"</strong> isn't recognized </h3>
+    <button #challengeBtn class='challenge' [ngClass]="{'hover': hover}"
+        (touchstart)="startConfirmation()" 
+        (touchend)="endConfirmation()"
+        (touchmove)="touchmove($event)"
+        (mouseleave)="killTimeout()" 
+        (mousedown)="startConfirmation()" 
+        (mouseup)="endConfirmation()">
+        <span>🔨ערעור</span>
+    </button>
+    
+</div>

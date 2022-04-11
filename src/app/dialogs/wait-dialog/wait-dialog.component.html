@@ -1,0 +1,19 @@
+<div class="wait-container">
+    <button mat-button [mat-dialog-close]>✖</button>
+    <div>
+        Challenge already solved (WOO-HOO🥳)
+    </div>
+    <div>
+        Word <strong>{{solvedWord | uppercase}}</strong> found in {{attemptToSolveWord}} attempts!
+        <div>
+            Current average of guesses to solve {{wordLength}} letter words is: <strong>{{averageGuessesPerWord}}</strong>
+        </div>
+    </div>
+    
+    <div>
+        Please wait for the next one, which will be available in:
+        <div class="time-to-next-word">
+            {{timeToNextWord}}⌛
+        </div>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+.no-word-container{
+  display: flex;
+  flex-direction: column;
+  gap: 3rem 0;
+  padding: 2.5rem;
+  align-items: center;
+  background-color: var(--bg-color-dialog);
+  border-radius: 1rem;
+  width: fit-content;
+  margin: 0 auto;
+  position: relative;
+  box-shadow: inset 0 0 0.25rem 0.1rem;
+
+  h3{
+    user-select: none;
+    display: inline;
+    padding: .5rem;
+    border-radius: 1rem;
+    margin: 0;
+  }
+  button.close{
+    position: absolute;
+    right: 0.75em;
+    top: 0.75em;
+    border: none;
+    background: transparent;
+    font-size: 1.25rem;
+    color: var(--text-color);  
+  }
+    
+  button{
+    cursor: pointer;
+    outline: none;
+  }
+  
+  button.challenge{
+    padding: 0.5rem 1rem;
+    background: none;
+    border: 0;
+    box-sizing: border-box;
+
+    transition: color 1s;
+    // Using inset box-shadow instead of border for sizing simplicity
+    box-shadow: inset 0 0 0 .25rem red;
+    color: red;
+    font-size: inherit;
+    font-weight: 700;
+  
+    // Required, since we're setting absolute on pseudo-elements
+    position: relative;
+    vertical-align: middle;
+  
+    &::before,
+    &::after {
+      box-sizing: inherit;
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: .25rem solid transparent;
+    }
+
+    // This covers the top & right borders (expands right, then down)
+    &::before {
+      top: 0;
+      left: 0;
+    }
+  
+    // And this the bottom & left borders (expands left, then up)
+    &::after {
+      bottom: 0;
+      right: 0;
+    }
+    
+    &.hover {
+      color: green;
+    }
+  
+    &.hover::before,
+    &.hover::after {
+      width: 100%;
+      height: 100%;
+    }
+  
+    &.hover::before {
+      border-top-color: green; // Make borders visible
+      border-right-color: green;
+      transition:
+        width 0.25s ease-out, // Width expands first
+        height 0.25s ease-out 0.25s; // And then height
+    }
+  
+    &.hover::after {
+      border-bottom-color: green; // Make borders visible
+      border-left-color: green;
+      transition:
+        border-color 0s ease-out 0.5s, // Wait for ::before to finish before showing border
+        width 0.25s ease-out 0.5s, // And then extending width
+        height 0.25s ease-out 0.75s; // And finally height   
+    }
+    
+    span{
+      font-size: 1.2rem;
+    }
+  }
+}
