@@ -1,17 +1,20 @@
 <div class="wait-container">
     <button mat-button [mat-dialog-close]>✖</button>
     <div>
-        Challenge already solved (WOO-HOO🥳)
+        Adirdle{{wordLength}} already solved🥳
     </div>
-    <div>
-        Word <strong>{{solvedWord | uppercase}}</strong> found in {{attemptToSolveWord}} attempts!
+    <div class="stats">
         <div>
-            Current average of guesses to solve {{wordLength}} letter words is: <strong>{{averageGuessesPerWord}}</strong>
+            <strong>{{solvedWord | uppercase}}</strong>
         </div>
+        <small>found in {{attemptToSolveWord}} attempts!</small>
+
+        <div>Average of guesses: <strong>{{averageGuessesPerWord}}</strong></div>
+        <div>Games played: <strong>{{gamesCount}}</strong></div>
     </div>
     
     <div>
-        Please wait for the next one, which will be available in:
+        Next word in:
         <div class="time-to-next-word">
             {{timeToNextWord}}⌛
         </div>

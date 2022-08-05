@@ -5,6 +5,7 @@
             [darkMode]="darkMode" [wordLength]="wordLength"
             (toggleDarkModeEmitter)="toggleDarkMode()"
             (switchGameModeEmitter)="switchGameMode()"
+            (randomizeWordEmitter)="randomizeWord()"
             (resetKeyboardPositionEmitter)="resetKeyboardPosition()"
         ></app-header>
         <main class="guesses">
@@ -16,7 +17,7 @@
                         {{ guess.letter }}
                     </div>
                 </li>
-                <li [class.word6]="wordLength === 6" #nextGuessWrapper *ngIf='showNextGuessRow' class='next-guess'>
+                <li [class.word6]="wordLength === 6" #nextGuessWrapper [ngClass]='{hide: didPlayerWin}' class='next-guess'>
                     <span (click)='resetNextGuess()' class="clear-guess">🗑️</span>
                     <div [class.marker]='nextGuess[0]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[0]?.letter }}</div>
                     <div [class.marker]='nextGuess[1]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[1]?.letter }}</div>
@@ -27,16 +28,20 @@
                     <span *ngIf='guesses.length > 3' (click)='helppp()' class="sos">🆘</span>
                 </li>
             </ul>
-            <div *ngIf="showShare">
+            <div class="share-wrapper" *ngIf="showShare">
                 <button (click)='shareScore()' class="share">
                     Share
+                    <img src="/assets/icons/share.svg">
+                </button>
+                <button (click)='shareImage()' class="share">
+                    Share Image
                     <img src="/assets/icons/share.svg">
                 </button>
             </div>
         </main>
     </div>
 
-    <footer [class.show-on-top]="showFooterOnTop" *ngIf='enableControls && !showShare' (click)="focusFooter()">
+    <footer [class.show-on-top]="showFooterOnTop" [style.display]='enableControls && !didPlayerWin && !showShare ? "initial" : "none"' (click)="focusFooter()">
         <app-keyboard 
             (enterClickedEmitter)="enterClicked()" 
             (letterClickedEmitter)="letterClicked($event)"

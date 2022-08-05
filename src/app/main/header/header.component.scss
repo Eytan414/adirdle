@@ -1,46 +1,56 @@
 header{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding-bottom: 1rem;
     width: 100vw;;
     z-index: 0;
+            
     button{
         background: transparent;
         border: none;            
         cursor: pointer;
-        padding: 0 1rem;
+        padding-right: .5rem;
         height: 4rem;
-
-        &.reset-keyboard-position{
-            font-size: 2rem;
-            padding: 0;
+        font-size: 2rem;
+    }
+    img{
+        height: 1.5rem;
+        width: 1.5rem;
+        vertical-align: middle;
+    }
+    .left-btns{
+        display: flex;
+        margin-left: .5rem;
+        .reset-keyboard-position{
             vertical-align: bottom;
         }
-        &.dark-mode-btn img{
+        .random{
+            font-size: 1.7rem;
+        }
+        .dark-mode-btn img{
             content:url('/assets/icons/dark-mode-black.svg');
             &.dark{
                 content:url('/assets/icons/dark-mode-white.svg');
             }
         }
-        &.toggle-word-count-wrapper img{
-            content:url('/assets/icons/number-6.png');
-            &.word6{
-                content:url('/assets/icons/number-5.png');
-            }
-        }
-        img{
-            height: 2rem;
-            width: 2rem;
-        }        
+        
     }
     
     a{
+        align-self: center;
         margin: 0;
         padding: 0.5rem;
         font-size: 4rem;
         font-weight: bold;
         color: var(--app-title-color);
         text-decoration: none;
+    }
+
+    button.toggle-word-count-wrapper img{
+        content:url('/assets/icons/number-6.png');
+        &.word6{
+            content:url('/assets/icons/number-5.png');
+        }
     }
 }
 .dark-mode-on{

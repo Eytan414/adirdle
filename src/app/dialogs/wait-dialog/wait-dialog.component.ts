@@ -1,3 +1,4 @@
+import { GameService } from './../../services/game.service';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { StorageService } from 'src/app/services/storage.service';
@@ -15,30 +16,21 @@ export class WaitDialogComponent implements OnInit {
   guesses: Guess[];
   attemptToSolveWord:number;
   averageGuessesPerWord:number | string;
-
   pastScores:any;
+  gamesCount: string;
 
   constructor(
     private utilService: UtilsService,
-    private storageService: StorageService,
+    private gameService: GameService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   ngOnInit(): void {
     this.timeToNextWord = this.utilService.calculateTimeToNextWord();
     this.assignIncomingData();
-    this.pastScores = this.storageService.loadFromLocalStorage('pastScores');
     
-    let gameModeScores = this.pastScores[`word${this.wordLength}`];
-    let gamesPlayed = 0;
-    let totalGuesses = 0;
-    let keys = Object.keys(gameModeScores);
-    for(let key of keys){
-      totalGuesses += gameModeScores[key] * (+key);
-      gamesPlayed += gameModeScores[key];
-      
-    }
-    this.averageGuessesPerWord = (totalGuesses / gamesPlayed).toFixed(2);
+    let result = this.gameService.calculateUserAverageGuessesLength(this.wordLength, true);
+    [this.averageGuessesPerWord, this.gamesCount] = result;
   }
 
   private assignIncomingData() {

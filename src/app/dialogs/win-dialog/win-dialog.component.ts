@@ -14,12 +14,14 @@ export class WinDialogComponent implements OnInit{
   @ViewChild('challengeBtn', { static: true }) challengeBtn: ElementRef;
   timeout:any;
   timeToNextWord: string;
+  translationUrl: string;
 
   constructor(private utilService: UtilsService, @Inject(MAT_DIALOG_DATA) public data: any,
               private ref: MatDialogRef<WinDialogComponent>) { }
   
   ngOnInit(): void {
     this.timeToNextWord = this.utilService.calculateTimeToNextWord();
+    this.translationUrl = `https://www.morfix.co.il/en/${this.data.dailyWord}`;
   }
   
   startConfirmation():void{ //start of confirmation of word deletion (1sec long press required)

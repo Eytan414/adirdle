@@ -4,7 +4,11 @@
         
         <h3>Way to go! Congratulations!!</h3>
         <h3>
-            Secret word: <strong>{{data.dailyWord | uppercase}}</strong> found in {{data.guesses.length}} guesses
+            Secret word: 
+            <a target="_blank" [href]="translationUrl">
+                <strong>{{data.dailyWord | uppercase}}</strong> 
+            </a>
+            found in {{data.guesses.length}} guesses
         </h3>
 
         <div class='challenge-wrapper'>

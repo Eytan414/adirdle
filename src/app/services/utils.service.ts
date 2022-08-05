@@ -21,6 +21,25 @@ export class UtilsService {
       decodedWord += String.fromCharCode(word.charCodeAt(i) / 123);
     return decodedWord;
   }
+  shuffle(array: string[]):string[] {
+    let currentIndex:number = array.length;
+    let randomIndex:number;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
+
   calcHoursSinceRelease():number {
     let now = dayjs();
     let releaseDate = dayjs(ENV.releaseDate).hour(3); //resets at 3am/3pm to Aadir's request
@@ -72,6 +91,7 @@ export class UtilsService {
     text += 'Do you think you can do better? Click the link below to begin!\n';
     return text;
   }
+  
 }
 
 export const HOURS_INTERVAL:number = 12;

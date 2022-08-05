@@ -15,7 +15,8 @@ export class KeyboardComponent implements OnInit {
   @ViewChild('keyboard', { static: false }) keyboard: ElementRef;
   keyboardSize: number;
   dragPosition: Point = { x: 0, y: 0 };
-
+  locked: boolean = false;
+  
   @Input() yellow: Set<string>;
   @Input() dark: Set<string>;
   @Input() green: Set<string>;
@@ -42,7 +43,11 @@ export class KeyboardComponent implements OnInit {
     this.nextGuess = changes.nextGuess?.currentValue ?? this.nextGuess;
   }
 
-  setupKeyboard(settings: any) {
+  setupKeyboard(settings: KeyboardPrefs) {
+    this.locked = settings.locked ?? this.locked;
+    if(settings.locked && this.keyboard)
+      this.keyboard.nativeElement.classList.add('locked-to-bottom');
+
     this.dragPosition = settings.dragPosition ?? this.dragPosition;
     this.keyboardSize = settings.lastKeyboardFactor ?? this.keyboardSize;
     this.setKeyboardSize(this.keyboardSize);
@@ -66,6 +71,7 @@ export class KeyboardComponent implements OnInit {
     let lastKeyboardFactor = +/[0-9](\.[0-9]+)?/.exec(cssVarSize)[0];
 
     let keyboardPrefs: KeyboardPrefs = {
+      locked: this.locked,
       dragPosition: this.dragPosition,
       lastKeyboardFactor: lastKeyboardFactor
     };
@@ -74,16 +80,23 @@ export class KeyboardComponent implements OnInit {
   enlarge(): void {
     this.keyboardSize *= 1.05;
     this.setKeyboardSize(this.keyboardSize);
+    this.saveKeyboardPrefs();
   }
+  
   shrink(): void {
     this.keyboardSize *= .95;
     this.setKeyboardSize(this.keyboardSize);
+    this.saveKeyboardPrefs();
   }
   lockKeyboardPosition(): void {
     this.keyboard.nativeElement.classList.add('locked-to-bottom');
+    this.locked = true;
+    this.saveKeyboardPrefs();
   }
   unlockKeyboardPosition(): void {
     this.keyboard.nativeElement.classList.remove('locked-to-bottom');
+    this.locked = false;
+    this.saveKeyboardPrefs();
   }
   resetKeyboardColoring(): void {
     this.keyboard.nativeElement.querySelectorAll('span')
@@ -99,5 +112,13 @@ export class KeyboardComponent implements OnInit {
   enterClicked(): void {
     this.enterClickedEmitter.emit();
   }
-
+  
+  private saveKeyboardPrefs():void{
+    let keyboardPrefs: KeyboardPrefs = {
+      locked: this.locked,
+      dragPosition: this.dragPosition,
+      lastKeyboardFactor: this.keyboardSize
+    };
+    this.storageService.saveToLocalStorage('keyboardPrefs', keyboardPrefs);
+  }
 }

@@ -14,6 +14,7 @@ export class HeaderComponent  {
   @Output() switchGameModeEmitter = new EventEmitter<null>();
   @Output() toggleDarkModeEmitter = new EventEmitter<null>();
   @Output() resetKeyboardPositionEmitter = new EventEmitter<null>();
+  @Output() randomizeWordEmitter = new EventEmitter<null>();
 
   constructor(private storageService: StorageService, private cd: ChangeDetectorRef) { }
 
@@ -32,6 +33,10 @@ export class HeaderComponent  {
   }
   toggleDarkMode() {
     this.toggleDarkModeEmitter.emit();
+  }
+  randomWord():void{
+    this.randomizeWordEmitter.emit();
+
   }
 
 }

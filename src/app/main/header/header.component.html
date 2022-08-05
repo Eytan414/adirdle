@@ -3,11 +3,12 @@
         <button [disabled]="!enableControls" (click)='toggleDarkMode()' class="dark-mode-btn">
             <img [ngClass]="{'dark': darkMode}" title="Switch to light mode">
         </button>
+        <button [disabled]="!enableControls" (click)="randomWord()" class="random"> 🎲 </button>    
         <button *ngIf="!didPlayerWin" (click)="resetKeyboardPosition()" class="reset-keyboard-position">
             ⌨️
         </button>    
     </div>
-    <a href="/?mode=5">Dirdle</a>
+    <a href="/?mode=5">Adirdle</a>
     
     <button [disabled]="!enableControls" (click)="switchGameMode()" class="toggle-word-count-wrapper">
             <img [ngClass]="{'word6': wordLength === 6}"  title="Switch to 5 word puzzle">

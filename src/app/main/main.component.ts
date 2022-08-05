@@ -1,6 +1,6 @@
 import { Guess } from '../models/Guess';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit, ViewChild, ViewEncapsulation, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -14,6 +14,9 @@ import { HeaderComponent } from './header/header.component';
 import { DEFAULT_KEYBOARD_SETTINGS, MOBILE_BREAKPOINT, DEFAULT_KEYBOARD_SETTINGS_MOBILE } from './data';
 import { ColorMarkings } from '../models/ColorMarking';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { EmailService } from '../services/email.service';
+import { GameService } from '../services/game.service';
+
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -44,7 +47,7 @@ export class MainComponent implements OnInit {
   darkMode: boolean = false;
   wordLength: number = 5;
   referenceDB: string = 'words5';
-  showNextGuessRow: boolean = true;
+  // showNextGuessRow: boolean = true;
   lastUsersWin: any;
   latestGuesses: any;
   showShare: boolean = false;
@@ -57,15 +60,18 @@ export class MainComponent implements OnInit {
   }
   marker: number;
   nextGuessSlots: Array<HTMLDivElement>;
+  isRandomWord: boolean = false;
   
   constructor(
     private storageService: StorageService, 
     private utilService: UtilsService,
+    private emailService: EmailService,
+    private gameService: GameService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private router: Router, 
-    private _snackBar: MatSnackBar
-
+    private _snackBar: MatSnackBar,
+    private cd: ChangeDetectorRef
   ) { }
   
   ngOnInit(): void {
@@ -76,37 +82,37 @@ export class MainComponent implements OnInit {
       if(queryParams.mode) this.wordLength = +queryParams.mode;
       this.referenceDB = this.wordLength === 5 ? 'words5' : 'words6';
       let words = await this.storageService.readDbReference(this.referenceDB);
+      
       this.validWords = words;
       this.gameModeKey = `word${this.wordLength}`;
       if (!this.validWords) return;
       
-      this.showNextGuessRow = true;
+      // this.showNextGuessRow = true;
       this.dailyWord = queryParams.hasOwnProperty('word') ? 
         this.utilService.decodeWord(queryParams.word) : //set puzzleword to word passed in query params
         this.validWords[Math.floor(hoursSinceRelease / 12)]; //get random word from db every 12 hours
         
-      this.lastUsersWin = this.storageService.loadFromLocalStorage('lastWin') || {};
-      if (this.lastUsersWin.hasOwnProperty(this.gameModeKey) &&
-          this.lastUsersWin[this.gameModeKey].word === this.dailyWord) //case user already solved active puzzle
-            this.setWaitingMode();
-      else { //normal case
-        this.enableControls = true;
-      }
-      this.loadUserSettings();
       this.initializeApp();
+      this.loadUserSettings();
+      this.lastUsersWin = this.storageService.loadFromLocalStorage('lastWin') || {};
+      if (this.lastUsersWin.hasOwnProperty(this.gameModeKey) && //case user already solved active puzzle
+          this.lastUsersWin[this.gameModeKey].word === this.dailyWord) 
+            this.setWaitingMode();
     });
     
   }
   
   loadUserSettings() {
+    this.cd.detectChanges();
     let settings = this.storageService.loadFromLocalStorage('keyboardPrefs');
     if (settings) 
-      this.keyboardComponent.setupKeyboard(settings);
+    this.keyboardComponent.setupKeyboard(settings);
     this.latestGuesses = this.storageService.loadFromLocalStorage('latestGuesses') || {};
     //case user's guesses are for active puzzle
     if(this.latestGuesses.hasOwnProperty(this.gameModeKey) &&
-      this.latestGuesses[this.gameModeKey].word === this.dailyWord){ 
-        this.guesses = this.latestGuesses[this.gameModeKey].latestGuesses || [];
+    this.latestGuesses[this.gameModeKey].word === this.dailyWord){ 
+      this.guesses = this.latestGuesses[this.gameModeKey].latestGuesses || [];
+      this.cd.detectChanges();
     }
     this.colorizeKeyboard(this.guesses, this.dailyWord);
 
@@ -122,7 +128,6 @@ export class MainComponent implements OnInit {
   }
 
   setWaitingMode() {
-    this.showNextGuessRow = false;
     this.showShare = true;
     this.didPlayerWin = true;
     this.handleWaitDialog();
@@ -152,7 +157,7 @@ export class MainComponent implements OnInit {
 
   setMarker(newMarker: number) {
     let lastIndex = this.nextGuess.length - 1;
-    if(newMarker > lastIndex) newMarker = lastIndex;
+    if(lastIndex >= 0 && newMarker > lastIndex) newMarker = lastIndex;
     if(newMarker <= 0) newMarker = 0;
 
     for(let [i, guess] of this.nextGuess.entries()) {
@@ -164,16 +169,15 @@ export class MainComponent implements OnInit {
 
   resetNextGuess():void {
     this.nextGuess = [];
-    for(let i = 0; i < this.wordLength; i++){
+    for(let i = 0; i < this.wordLength; i++)
       this.nextGuess.push({ letter: '', state: 'initial', marker: false });
-      if(i === 0) this.nextGuess[i].marker = true;
-    }
-
+    this.nextGuess[0].marker = true;
     this.setMarker(0);
   }
 
   enterClicked(): void {
-    if(this.nextGuess.length < this.wordLength) return;
+    let typedLettersCount = this.gameService.countTypedLetters(this.nextGuess);
+    if(typedLettersCount < this.wordLength) return;
     let currentGuess: string = this.nextGuess.map(guess => guess.letter).join('');
     if(!this.validWords.includes(currentGuess)) {
       this.handleNoWordDialog(currentGuess);
@@ -191,7 +195,7 @@ export class MainComponent implements OnInit {
       return;
     }
     this.handleWinDialog();
-    this.updateLastWIn();
+    if(!this.isRandomWord) this.updateLastWIn();
     this.updatePastScores();
     //scroll to bottom
     document.querySelector('main.guesses').scrollTop = document.querySelector('main.guesses').scrollHeight;
@@ -267,8 +271,8 @@ export class MainComponent implements OnInit {
   }
   handleWinDialog() {
     this.enableControls = false;
-    this.showNextGuessRow = false;
     this.didPlayerWin = true;
+    this.showShare = true;
     let dialogRef = this.dialog.open(WinDialogComponent, {
       data: {
         guesses: this.guesses,
@@ -280,7 +284,6 @@ export class MainComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((removeWordFromDictionary: boolean) => {
-      this.enableControls = true;
       if (removeWordFromDictionary) {
         let newWordList: string[] = this.validWords.filter(w => { return w !== this.dailyWord });
         let snackbarRef = this._snackBar.open(`${this.dailyWord.toUpperCase()} removed from dictionary`, 'UNDO', {
@@ -288,12 +291,17 @@ export class MainComponent implements OnInit {
           duration: 3000
         });
         snackbarRef.afterDismissed().subscribe(info => {
-          if(!info.dismissedByAction)//user didn't click undo action
+          this.enableControls = true;          
+          if(!info.dismissedByAction){//user didn't click undo action
             this.storageService.updateDbReference(this.referenceDB, newWordList);
+            let avgToWin = this.gameService.calculateUserAverageGuessesLength(this.wordLength) as string;
+            this.emailService.sendEmail('מחיקה', this.dailyWord, avgToWin);
+          }
         });
-      }
+      } else this.enableControls = true;
+      this.cd.detectChanges();
+      this.keyboardComponent.setupKeyboard(this.storageService.loadFromLocalStorage('keyboardPrefs'));
     });
-
   }
   handleNoWordDialog(currentGuess: string) {
     this.enableControls = false;
@@ -303,29 +311,37 @@ export class MainComponent implements OnInit {
       data: { guess: currentGuess,},
       position: { top: '3rem' }
     });
-    setTimeout(() => { dialogRef.close(false) }, 5000);
+    setTimeout(() => { dialogRef.close(false) }, 3500);
     
     dialogRef.afterClosed().subscribe((addWordToDictionary: boolean) => {
-      this.enableControls = true;
       if (addWordToDictionary) {
         let snackbarRef = this._snackBar.open(`${currentGuess.toUpperCase()} added to dictionary`, 'UNDO', {
           panelClass: "snackbar",
           duration: 3000
         });
         snackbarRef.afterDismissed().subscribe(info => {
-          if(!info.dismissedByAction){//user didn't click undo action
+          this.enableControls = true;
+          if(!info.dismissedByAction){//add word if user didn't click undo action
             this.validWords.push(currentGuess);
             let newWordList: string[] = this.validWords;
             this.storageService.updateDbReference(this.referenceDB, newWordList);
+            let avgToWin = this.gameService.calculateUserAverageGuessesLength(this.wordLength) as string;
+            this.emailService.sendEmail('הוספה', currentGuess, avgToWin);
           }
         });
-    }});
+    } else this.enableControls = true;
+
+    this.cd.detectChanges();
+    this.keyboardComponent.setupKeyboard(this.storageService.loadFromLocalStorage('keyboardPrefs'));
+  });
   }
 
   initializeApp(): void {
     this.nextGuessSlots = this.nextGuessWrapper.nativeElement.querySelectorAll('div');
     this.marker = 0;
     this.resetNextGuess();
+    this.enableControls = true;
+    this.guesses = [];
   }
   
   toggleDarkMode() {
@@ -340,6 +356,35 @@ export class MainComponent implements OnInit {
     this.storageService.saveToLocalStorage('darkMode', this.darkMode);
   }
   
+  toggleOverflow(el:HTMLElement):void{
+    if(el.style.overflowY === 'hidden'){
+      el.style.maxHeight = '50vh';
+      el.style.overflowY = 'auto';
+    }else{
+      el.style.maxHeight = '100%';
+      el.style.overflowY = 'hidden';
+    }
+    el.offsetHeight;
+  }
+  async shareImage(){
+    let divToCapture:HTMLDivElement = <HTMLDivElement>document.querySelector("main.guesses");    
+    this.toggleDivCss(divToCapture);
+    setTimeout(async()=>{
+      await this.gameService.jpegCreator(divToCapture);    
+    }, 100);
+    
+  }
+
+  toggleDivCss(divToCapture: HTMLElement): void{
+    if(divToCapture.style.maxHeight === '50vh'){
+      divToCapture.style.maxHeight = '100%';
+      divToCapture.style.overflowY = 'hidden';
+    } else{
+      divToCapture.style.maxHeight = '50vh';
+      divToCapture.style.overflowY = 'auto';
+    }
+  }
+
   shareScore(){
     let text = this.utilService.analyzeTextToShare(this.guesses);
     let encodedWord = this.utilService.encodeWord(this.dailyWord);
@@ -350,6 +395,17 @@ export class MainComponent implements OnInit {
       DEFAULT_KEYBOARD_SETTINGS_MOBILE:
       DEFAULT_KEYBOARD_SETTINGS;
     this.keyboardComponent.setupKeyboard(settings);
+  }
+  randomizeWord():void{
+    let randomIndex = Math.floor(
+      Math.random() * this.validWords.length-1
+    );
+    this.dailyWord = this.validWords[randomIndex];
+    this.showShare = false;
+    this.didPlayerWin = false;
+    this.initializeApp();
+    this.loadUserSettings();
+    this.isRandomWord = true;
   }
   switchGameMode(){
     this.guesses = [];
@@ -391,4 +447,5 @@ export class MainComponent implements OnInit {
   focusFooter(){
     this.showFooterOnTop = true;
   }
+
 }
