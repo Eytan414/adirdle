@@ -42,14 +42,14 @@ export class UtilsService {
 
   calcHoursSinceRelease():number {
     let now = dayjs();
-    let releaseDate = dayjs(ENV.releaseDate).hour(3); //resets at 3am/3pm to Aadir's request
+    let releaseDate = dayjs(ENV.releaseDate).hour(0); 
     return now.diff(releaseDate, 'hours');
   }
   calculateTimeToNextWord(): string{
     let now = dayjs();
-    let releaseDate = dayjs(ENV.releaseDate).hour(3); //resets at 3am/3pm    
+    let releaseDate = dayjs(ENV.releaseDate).hour(0); //resets at midnight  
     let hoursSinceRelease = now.diff(releaseDate, 'hours');
-    let hoursToNextWord = (HOURS_INTERVAL - 1) - hoursSinceRelease % HOURS_INTERVAL;//twice a day
+    let hoursToNextWord = (HOURS_INTERVAL - 1) - hoursSinceRelease % HOURS_INTERVAL;//once a day
     
     let minutesSinceRelease = now.diff(releaseDate, 'minutes');
     let minutesToNextWord = (MINUTES_INTERVAL - 1) - minutesSinceRelease % MINUTES_INTERVAL;
@@ -94,5 +94,5 @@ export class UtilsService {
   
 }
 
-export const HOURS_INTERVAL:number = 12;
+export const HOURS_INTERVAL:number = 24;
 export const MINUTES_INTERVAL:number = 60;

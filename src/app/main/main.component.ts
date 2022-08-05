@@ -82,7 +82,7 @@ export class MainComponent implements OnInit {
       if(queryParams.mode) this.wordLength = +queryParams.mode;
       this.referenceDB = this.wordLength === 5 ? 'words5' : 'words6';
       let words = await this.storageService.readDbReference(this.referenceDB);
-      
+
       this.validWords = words;
       this.gameModeKey = `word${this.wordLength}`;
       if (!this.validWords) return;
@@ -90,7 +90,7 @@ export class MainComponent implements OnInit {
       // this.showNextGuessRow = true;
       this.dailyWord = queryParams.hasOwnProperty('word') ? 
         this.utilService.decodeWord(queryParams.word) : //set puzzleword to word passed in query params
-        this.validWords[Math.floor(hoursSinceRelease / 12)]; //get random word from db every 12 hours
+        this.validWords[Math.floor(hoursSinceRelease / 24)]; //get random word from db every 24util hours
         
       this.initializeApp();
       this.loadUserSettings();
@@ -288,7 +288,7 @@ export class MainComponent implements OnInit {
         let newWordList: string[] = this.validWords.filter(w => { return w !== this.dailyWord });
         let snackbarRef = this._snackBar.open(`${this.dailyWord.toUpperCase()} removed from dictionary`, 'UNDO', {
           panelClass: "snackbar",
-          duration: 3000
+          duration: 2000
         });
         snackbarRef.afterDismissed().subscribe(info => {
           this.enableControls = true;          
@@ -317,7 +317,7 @@ export class MainComponent implements OnInit {
       if (addWordToDictionary) {
         let snackbarRef = this._snackBar.open(`${currentGuess.toUpperCase()} added to dictionary`, 'UNDO', {
           panelClass: "snackbar",
-          duration: 3000
+          duration: 2000
         });
         snackbarRef.afterDismissed().subscribe(info => {
           this.enableControls = true;
@@ -371,7 +371,7 @@ export class MainComponent implements OnInit {
     this.toggleDivCss(divToCapture);
     setTimeout(async()=>{
       await this.gameService.jpegCreator(divToCapture);    
-    }, 100);
+    }, 200);
     
   }
 
