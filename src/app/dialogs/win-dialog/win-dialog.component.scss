@@ -37,8 +37,13 @@
       border-radius: 1rem;
       margin: 0;
 
-      a:visited{
-        color: mediumpurple !important;
+      a {
+        &:link{
+          color: coral !important;
+        }
+        &:visited{
+          color: mediumpurple !important;
+        }
       }
     }
     

@@ -58,7 +58,7 @@ export class WinDialogComponent implements OnInit{
   }
   
   shareScore(){
-    let text = this.utilService.analyzeTextToShare(this.data.guesses);
+    let text = this.utilService.analyzeTextToShare(this.data.guesses, this.data.dailyWord.length);
     let encodedWord = this.utilService.encodeWord(this.data.dailyWord);
     this.utilService.shareScore(text, encodedWord);
   }

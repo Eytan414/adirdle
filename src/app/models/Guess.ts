@@ -3,5 +3,3 @@ export interface Guess {
     state: string;
     marker: boolean;
   }
-  
-  

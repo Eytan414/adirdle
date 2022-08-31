@@ -41,28 +41,28 @@ export class UtilsService {
   }
 
   calcHoursSinceRelease():number {
-    let now = dayjs();
-    let releaseDate = dayjs(ENV.releaseDate).hour(0); 
+    const now = dayjs();
+    const releaseDate = dayjs(ENV.releaseDate).hour(0); 
     return now.diff(releaseDate, 'hours');
   }
   calculateTimeToNextWord(): string{
-    let now = dayjs();
-    let releaseDate = dayjs(ENV.releaseDate).hour(0); //resets at midnight  
-    let hoursSinceRelease = now.diff(releaseDate, 'hours');
-    let hoursToNextWord = (HOURS_INTERVAL - 1) - hoursSinceRelease % HOURS_INTERVAL;//once a day
+    const now = dayjs();
+    const releaseDate = dayjs(ENV.releaseDate).hour(0); //resets at midnight  
+    const hoursSinceRelease = now.diff(releaseDate, 'hours');
+    const hoursToNextWord = (HOURS_INTERVAL - 1) - hoursSinceRelease % HOURS_INTERVAL;//once a day
     
-    let minutesSinceRelease = now.diff(releaseDate, 'minutes');
-    let minutesToNextWord = (MINUTES_INTERVAL - 1) - minutesSinceRelease % MINUTES_INTERVAL;
+    const minutesSinceRelease = now.diff(releaseDate, 'minutes');
+    const minutesToNextWord = (MINUTES_INTERVAL - 1) - minutesSinceRelease % MINUTES_INTERVAL;
     
-    let formattedHours = this.addLeadingZeros(hoursToNextWord);
-    let formattedMinutes = this.addLeadingZeros(minutesToNextWord);
+    const formattedHours = this.addLeadingZeros(hoursToNextWord);
+    const formattedMinutes = this.addLeadingZeros(minutesToNextWord);
     return `${formattedHours}:${formattedMinutes}`;
   }  
-  addLeadingZeros(value:number) {
+  addLeadingZeros(value:number): string | number {
     return value < 10 ? '0' + value : value;
   }
   async shareScore(text: string, encodedWord: string){
-    let wordLength = encodedWord.length;
+    const wordLength = encodedWord.length;
     const dataToShare = {
       title: 'Dirdle',
       text: text,
@@ -72,8 +72,8 @@ export class UtilsService {
       await navigator.share(dataToShare);
     } catch(err) {}
   }
-  analyzeTextToShare(guesses: Array<Guess[]>): string{
-    let text = `Secret word found in ${guesses.length} attempts:\n`;
+  analyzeTextToShare(guesses: Array<Guess[]>, wordLength:number): string{
+    let text = `Dirdle${wordLength} found in ${guesses.length} attempts:\n`;
     for(let guess of guesses){
       for(let letter of guess){
         if(letter.state === "bullseye"){
@@ -88,7 +88,7 @@ export class UtilsService {
       }
       text += "\n";
     }
-    text += 'Do you think you can do better? Click the link below to begin!\n';
+    text += 'Think you can do better? Click the link to begin!\n';
     return text;
   }
   

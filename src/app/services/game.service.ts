@@ -53,10 +53,7 @@ export class GameService {
         try {
           await navigator.share({files: fileArr});
         } catch(err) {}
-      },
-      error=>{
-        console.log(error)
-      });
+      })
     
     
     // domtoimage.toJpeg(divToCapture, {filter: this.filter}).then(function (dataUrl:string) {

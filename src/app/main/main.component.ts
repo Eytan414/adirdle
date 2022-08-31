@@ -156,9 +156,11 @@ export class MainComponent implements OnInit {
   }
 
   setMarker(newMarker: number) {
-    let lastIndex = this.nextGuess.length - 1;
-    if(lastIndex >= 0 && newMarker > lastIndex) newMarker = lastIndex;
-    if(newMarker <= 0) newMarker = 0;
+    const lastIndex = this.nextGuess.length - 1;
+    if(newMarker <= 0) newMarker = 0
+      else
+    if(lastIndex >= 0 && newMarker > lastIndex) 
+      newMarker = lastIndex;
 
     for(let [i, guess] of this.nextGuess.entries()) {
       guess.marker = false;
@@ -386,7 +388,7 @@ export class MainComponent implements OnInit {
   }
 
   shareScore(){
-    let text = this.utilService.analyzeTextToShare(this.guesses);
+    let text = this.utilService.analyzeTextToShare(this.guesses, this.wordLength);
     let encodedWord = this.utilService.encodeWord(this.dailyWord);
     this.utilService.shareScore(text, encodedWord);
   }
@@ -430,10 +432,12 @@ export class MainComponent implements OnInit {
 
   helppp(): void {
     for(let [i, letter] of this.dailyWord.split('').entries()) {
-      if(!this.colorMarkingSets.green.has(letter)){
+      if(!this.colorMarkingSets.green.has(letter)
+        && !this.colorMarkingSets.yellow.has(letter)){
         this.nextGuess[i].letter = letter;
         this.nextGuess[i].state = 'bullseye';
         this.colorMarkingSets.green.add(letter);
+        this.setMarker(i+1);
         break;
       }
     }
