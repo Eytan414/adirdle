@@ -59,7 +59,6 @@ export class HighscoresComponent implements OnInit {
       type: 'bar',
       datasets: [{ 
           data: [],
-          label: ''
         }],
         labels:[]
       };
@@ -68,7 +67,6 @@ export class HighscoresComponent implements OnInit {
         type: 'bar',
         datasets: [{ 
           data: [],
-          label: 'Attempts'
       }]
     };
     userRecord.words5.details.forEach((count:number, attempts:number) => {
