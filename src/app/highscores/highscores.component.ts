@@ -3,7 +3,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Component, OnInit } from '@angular/core';
 import { RECORDS_DB_KEY } from '../constants';
 import { Highscores } from '../models/Highscores';
-import { BAR_CHART_OPTIONS, GraphData } from './chart/constants';
+import { BAR_CHART_OPTIONS_5, BAR_CHART_OPTIONS_6, DEFAULT_TITLE, GraphData } from './constants';
 import { ChartConfiguration } from 'chart.js';
 
 @Component({
@@ -39,42 +39,52 @@ export class HighscoresComponent implements OnInit {
   labels5:string[] = [];
   labels6:string[] = [];
   displayChart: boolean = false;
-  barChartOptions:ChartConfiguration<'radar'>['options'] = BAR_CHART_OPTIONS;
-
+  chartOptions5:ChartConfiguration<'radar'>['options'] = BAR_CHART_OPTIONS_5;
+  chartOptions6:ChartConfiguration<'radar'>['options'] = BAR_CHART_OPTIONS_6;
+  title: string = DEFAULT_TITLE;
   constructor(private storageService:StorageService) { }
   
   async ngOnInit() {
-    this.allRecords = await this.storageService.readDbReference(RECORDS_DB_KEY) as Highscores[]   
-    
+    this.allRecords = await this.storageService.readDbReference(RECORDS_DB_KEY) as Highscores[]   ;
+    this.allRecords = this.allRecords.filter(r => r);
+
     setInterval(() => (this.animateReverse = !this.animateReverse), 10000);
   }
 
   showChart(userRecord:Highscores){
+    this.title = userRecord.name.toUpperCase();
     this.labels5 = [];
-    this.labels6 = [];    
+    this.labels6 = [];
     this.data5 = {
-      parsing: {},
       type: 'bar',
-      data: { datasets: [{ 
-          data: []
-      }]}
-    };
-    this.data6 = {
-      parsing: false,
-      type: 'bar',
-      data: { datasets: [{ 
-          data: []
-      }]}
+      datasets: [{ 
+          data: [],
+          label: ''
+        }],
+        labels:[]
+      };
+      this.data6 = {
+        parsing: false,
+        type: 'bar',
+        datasets: [{ 
+          data: [],
+          label: 'Attempts'
+      }]
     };
     userRecord.words5.details.forEach((count:number, attempts:number) => {
-      this.data5.data.datasets[0].data.push({x:attempts, y:count});
+      this.data5.datasets[0].data.push(count);
       this.labels5.push(attempts+"");
     });
+    this.data5.labels = this.labels5;
     userRecord.words6.details.forEach((count:number, attempts:number) => {
-      this.data6.data.datasets[0].data.push({x:attempts, y:count});
+      this.data6.datasets[0].data.push(count);
       this.labels6.push(attempts+"");
     });
+    this.data6.labels = this.labels6;
     this.displayChart = true;
   }
-
+  backClicked(){
+    this.displayChart = false;
+    this.title = DEFAULT_TITLE;
+  }
 }

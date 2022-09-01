@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BAR_CHART_OPTIONS, GraphData } from './constants';
+import { BAR_CHART_OPTIONS_5, GraphData } from '../constants';
 import { ChartConfiguration } from 'chart.js';
 
 @Component({
@@ -8,11 +8,8 @@ import { ChartConfiguration } from 'chart.js';
   styleUrls: ['./chart.component.scss']
 })
 export class ChartComponent implements OnInit {
-  barChartOptions:ChartConfiguration<'radar'>['options'] = BAR_CHART_OPTIONS;
-  @Input() data5:GraphData;
-  @Input() data6:GraphData;
-  @Input() labels5:string[];
-  @Input() labels6:string[];
+  @Input() data:GraphData;
+  @Input() options:ChartConfiguration<any>['options'];
 
   constructor() { }
 

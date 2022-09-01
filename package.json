@@ -35,7 +35,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.1",
     "@angular/cli": "^14.2.0",
-    "@angular/compiler-cli":"^14.2.0",
+    "@angular/compiler-cli": "^14.2.0",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
     "protractor": "~7.0.0",
