@@ -2,9 +2,8 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Guess } from '../../models/Guess';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { INITIAL_KEYBOARD_SIZE, INITIAL_KEYBOARD_SIZE_MOBILE, MOBILE_BREAKPOINT } from '../data';
-import { CdkDragEnd } from '@angular/cdk/drag-drop/drag-events';
 import { KeyboardPrefs } from 'src/app/models/keyboardPrefs';
-import { Point } from '@angular/cdk/drag-drop';
+import { CdkDragEnd, Point } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-keyboard',
