@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
-import { StorageService } from 'src/app/services/storage.service';
+import { MatDialog } from '@angular/material/dialog';
+import { HighscoresComponent } from '../../highscores/highscores.component';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,9 @@ export class HeaderComponent  {
   @Output() resetKeyboardPositionEmitter = new EventEmitter<null>();
   @Output() randomizeWordEmitter = new EventEmitter<null>();
 
-  constructor(private storageService: StorageService, private cd: ChangeDetectorRef) { }
+  constructor(
+    private dialog: MatDialog,
+    private cd: ChangeDetectorRef) { }
 
   ngOnChanges(changes: SimpleChanges) {
     this.enableControls = changes.enableControls?.currentValue ?? this.enableControls;
@@ -36,7 +39,12 @@ export class HeaderComponent  {
   }
   randomWord():void{
     this.randomizeWordEmitter.emit();
-
+  }
+  openRecords():void{
+    this.dialog.open(HighscoresComponent, {
+      panelClass: 'win-dialog',
+      disableClose: true, hasBackdrop: false,
+    });
   }
 
 }

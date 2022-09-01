@@ -1,0 +1,22 @@
+<div class="record-card-container">
+    <div class="name">
+        {{userRecord?.name | uppercase}}
+    </div>
+    <div class="stat-wrapper">
+        <div class="headers">
+            <span>Games: </span>
+            <span>Avg: </span>
+        </div>
+        <div class="stats">
+            <img src="/assets/icons/number-5.png">
+            <div>{{userRecord?.words5.games}}</div>
+            <div>{{userRecord?.words5.average}}</div>
+        </div>
+        <div class="stats">
+            <img src="/assets/icons/number-6.png">
+            <div>{{userRecord?.words6.games}}</div>
+            <div>{{userRecord?.words6.average}}</div>
+        </div>
+    </div>
+</div>
+    

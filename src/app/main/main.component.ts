@@ -10,7 +10,9 @@ import { StorageService } from '../services/storage.service';
 import { UtilsService } from '../services/utils.service';
 import { WaitDialogComponent } from '../dialogs/wait-dialog/wait-dialog.component';
 import { KeyboardComponent } from './keyboard/keyboard.component';
-import { HeaderComponent } from './header/header.component';
+// import { HeaderComponent } from './header/header.component';
+import {HeaderComponent } from './header/header.component';
+
 import { DEFAULT_KEYBOARD_SETTINGS, MOBILE_BREAKPOINT, DEFAULT_KEYBOARD_SETTINGS_MOBILE } from './data';
 import { ColorMarkings } from '../models/ColorMarking';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -77,11 +79,15 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     let hoursSinceRelease = this.utilService.calcHoursSinceRelease();
     let queryParams$ = this.route.queryParams;
-    
+
+    const username = this.storageService.loadFromLocalStorage('username');
+    if(username) this.greet(username)
+    else this.gameService.openSigninDialog();
+
     queryParams$.subscribe(async (queryParams) => {
       if(queryParams.mode) this.wordLength = +queryParams.mode;
       this.referenceDB = this.wordLength === 5 ? 'words5' : 'words6';
-      let words = await this.storageService.readDbReference(this.referenceDB);
+      let words:string[] = await this.storageService.readDbReference(this.referenceDB) as string[];
 
       this.validWords = words;
       this.gameModeKey = `word${this.wordLength}`;
@@ -296,8 +302,7 @@ export class MainComponent implements OnInit {
           this.enableControls = true;          
           if(!info.dismissedByAction){//user didn't click undo action
             this.storageService.updateDbReference(this.referenceDB, newWordList);
-            let avgToWin = this.gameService.calculateUserAverageGuessesLength(this.wordLength) as string;
-            this.emailService.sendEmail('מחיקה', this.dailyWord, avgToWin);
+            this.emailService.sendEmail('מחיקה', this.dailyWord);
           }
         });
       } else this.enableControls = true;
@@ -327,8 +332,8 @@ export class MainComponent implements OnInit {
             this.validWords.push(currentGuess);
             let newWordList: string[] = this.validWords;
             this.storageService.updateDbReference(this.referenceDB, newWordList);
-            let avgToWin = this.gameService.calculateUserAverageGuessesLength(this.wordLength) as string;
-            this.emailService.sendEmail('הוספה', currentGuess, avgToWin);
+            // let avgToWin = this.gameService.calculateUserAverageGuessesLength(this.wordLength) as string;
+            this.emailService.sendEmail('הוספה', currentGuess);
           }
         });
     } else this.enableControls = true;
@@ -344,6 +349,15 @@ export class MainComponent implements OnInit {
     this.resetNextGuess();
     this.enableControls = true;
     this.guesses = [];
+    if ('wakeLock' in navigator) this.requestWakeLock();
+  }
+  
+  async requestWakeLock(){
+    try {
+      const wakeLock = await navigator['wakeLock'].request('screen');
+    } catch (err) {
+      console.log(`${err.name}, ${err.message}`);
+    }
   }
   
   toggleDarkMode() {
@@ -450,6 +464,11 @@ export class MainComponent implements OnInit {
   }
   focusFooter(){
     this.showFooterOnTop = true;
+  }
+  greet(username:string){
+    this._snackBar.open(`Hello ${username}`, undefined, {
+      panelClass: "snackbar", duration: 1000 
+    })
   }
 
 }

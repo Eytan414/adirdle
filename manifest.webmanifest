@@ -1,0 +1,15 @@
+{
+  "background_color": "green",
+  "description": "Best wordle game, at least for Aadir.",
+  "display": "fullscreen",
+  "icons": [
+    {
+      "src": "./assets/icons/logo.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "name": "Dirdle",
+  "short_name": "Dirdle",
+  "start_url": "./index.html"
+}

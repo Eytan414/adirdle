@@ -9,9 +9,15 @@
         </button>    
     </div>
     <a [href]="enableControls ? '/?mode=5' : 'javascript:void(0)'">Adirdle</a>
+    <div class="right-btns">
+        <button [disabled]="!enableControls" (click)="switchGameMode()" class="toggle-word-count-wrapper">
+            <img [ngClass]="{'word6': wordLength === 6}" title="Switch to 5 word puzzle">
+        </button>
+        
+        <button [disabled]="!enableControls" (click)="openRecords()" class="records">
+            <img src="../../assets/icons/chart.png">
+        </button>
+    </div>
     
-    <button [disabled]="!enableControls" (click)="switchGameMode()" class="toggle-word-count-wrapper">
-            <img [ngClass]="{'word6': wordLength === 6}"  title="Switch to 5 word puzzle">
-    </button>
-
+    
 </header>

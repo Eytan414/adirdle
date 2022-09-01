@@ -1,0 +1,39 @@
+.record-card-container{
+    background: lightcyan;
+    border-radius: 1rem;
+    border: 2px solid gold;
+    box-shadow: 0 0 3px 0 gold inset, 0 0 3px 0 gold;
+    font-size: 1rem;
+    > * {
+        padding: 1rem 0.75rem;
+    }
+    
+    .name{
+        background: var(--bg-color-dialog);
+        border-radius: 1rem 1rem 0 0;
+    }
+    .stat-wrapper{
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        div{
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .headers{
+            font-size: .75rem;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+        .stats{    
+            img{
+                height: 1rem;
+                width: 1rem;
+            }
+        }
+    }
+    
+}

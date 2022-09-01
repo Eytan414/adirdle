@@ -45,12 +45,14 @@ header{
         color: var(--app-title-color);
         text-decoration: none;
     }
-
-    button.toggle-word-count-wrapper img{
-        content:url('/assets/icons/number-6.png');
-        &.word6{
-            content:url('/assets/icons/number-5.png');
+    .right-btns{
+        .toggle-word-count-wrapper img{
+            content:url('/assets/icons/number-6.png');
+            &.word6{
+                content:url('/assets/icons/number-5.png');
+            }
         }
+        
     }
 }
 .dark-mode-on{

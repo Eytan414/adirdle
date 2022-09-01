@@ -1,18 +1,25 @@
-import { UtilsService } from 'src/app/services/utils.service';
 import { Injectable} from '@angular/core';
 import domtoimage from 'dom-to-image';
 import { Guess } from '../models/Guess';
 import { StorageService } from './storage.service';
+import { Highscores } from '../models/Highscores';
+import { SigninComponent } from '../dialogs/signin-dialog/signin.component';
+import { MatDialog } from '@angular/material/dialog';
+import { RECORDS_DB_KEY } from '../constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
-  constructor(private storageService:StorageService ) { }
+  constructor(
+    private storageService:StorageService,
+    private dialog: MatDialog,
+     ) { }
   
-  calculateUserAverageGuessesLength(wordLength:number, getGamesPlayed: boolean = false): string | any[]{
+  calculateUserAverageGuessesLength(wordLength:number, getGamesDetails: boolean = false): string | any[]{
     let pastScores = this.storageService.loadFromLocalStorage('pastScores');
-    
+    if(!pastScores) return '';
+
     let gameModeScores = pastScores[`word${wordLength}`];
     let gamesPlayed = 0;
     let totalGuesses = 0;
@@ -21,11 +28,9 @@ export class GameService {
       gamesPlayed += gameModeScores[key];
     }
     let avg = (totalGuesses / gamesPlayed).toFixed(2);
-
-    if(getGamesPlayed) return [avg, gamesPlayed];
-    return avg;
+    if(!getGamesDetails) return [avg];
+    return [avg, gamesPlayed, pastScores[`word${wordLength}`]];
   }
-
 
   countTypedLetters(guess:Array<Guess>):number {
     let count = 0;
@@ -45,7 +50,6 @@ export class GameService {
   }
 
   async jpegCreator(divToCapture: HTMLElement) {
-    
     domtoimage.toBlob(divToCapture, {filter: this.filter})
       .then(async function (dataUrl){
         let img = new File([dataUrl], "name.png", {type: "image/png"});
@@ -53,16 +57,55 @@ export class GameService {
         try {
           await navigator.share({files: fileArr});
         } catch(err) {}
-      })
+      }
+    )
+  }
+  
+  openSigninDialog() {
+    let dialogRef = this.dialog.open(SigninComponent, {
+      panelClass: 'win-dialog',
+      disableClose: true, hasBackdrop: false,
+      position: { top: '3rem' }
+    });
     
-    
-    // domtoimage.toJpeg(divToCapture, {filter: this.filter}).then(function (dataUrl:string) {
-    //   let link = document.createElement('a');
-    //   link.download = `${new Date().toISOString().split('T')[0]}.jpeg`;
-    //   link.href = dataUrl;
-    //   link.click();
-    //   });
-      
-  } 
+    dialogRef.afterClosed().subscribe(async (username: string) => {
+      if(!username) return;
+      this.storageService.saveToLocalStorage('username', username);
+      this.updateOrCreateUser(username);
+    });
+  }  
+  
+  async updateOrCreateUser(username: string) {
+    const users:Array<Highscores> = await this.storageService.readDbReference(RECORDS_DB_KEY) as Array<Highscores>;
+    const userIndex = users.findIndex(user => user?.name.toLowerCase() === username.toLowerCase());
+    const userHighscores = this.getUpdatedUserScores(username);
 
+    userIndex < 0 //index = -1 if user not found
+      ? users.push(userHighscores)
+      : users[userIndex] = userHighscores;
+
+    this.storageService.updateDbReference(RECORDS_DB_KEY, users);
+  }
+
+  private getUpdatedUserScores(username:string):Highscores{
+    const words5key = 5;   
+    const words6key = 6;   
+    const getGamesDetails = true;
+    const [words5average, words5games, words5details] = this.calculateUserAverageGuessesLength(words5key, getGamesDetails);
+    const [words6average, words6games, words6details] = this.calculateUserAverageGuessesLength(words6key, getGamesDetails);
+
+    return {
+      name: username,
+      words5: {
+        games:words5games ?? 0, 
+        average:words5average ?? 0,
+        details: words5details ?? {}
+      },
+      words6: {
+        games:words6games ?? 0, 
+        average:words6average ?? 0,
+        details: words6details ?? {}
+      },
+    }
+  }
 }

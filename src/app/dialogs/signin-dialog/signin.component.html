@@ -1,0 +1,13 @@
+<div class="signin-container">
+    <button class='close' mat-button [mat-dialog-close]>✖</button>
+    <div>Hello! What's your name? I can't seem to remember...
+        <p>Please enter real name, otherwise you'll have the enter passwords</p>
+    </div>
+    <div class="form-wrapper">
+        <input type="text" id="username" name="username" [(ngModel)]="username" />
+        <div>
+            <button [ngClass]="{'disabled': disableClick()}" (click)='ref.close(username)' class="ok">OK</button>
+            <button [mat-dialog-close] class="skip">Skip</button>
+        </div>
+    </div>
+</div>

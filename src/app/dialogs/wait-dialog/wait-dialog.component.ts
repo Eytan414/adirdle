@@ -1,7 +1,6 @@
 import { GameService } from './../../services/game.service';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { StorageService } from 'src/app/services/storage.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Guess } from '../../models/Guess';
 @Component({
@@ -16,7 +15,6 @@ export class WaitDialogComponent implements OnInit {
   guesses: Guess[];
   attemptToSolveWord:number;
   averageGuessesPerWord:number | string;
-  pastScores:any;
   gamesCount: string;
 
   constructor(

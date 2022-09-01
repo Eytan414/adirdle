@@ -4,6 +4,8 @@ import { initializeApp} from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { ENV } from '../../environments/environment';
+import { Highscores } from '../models/Highscores';
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,15 +17,15 @@ export class StorageService {
   constructor() { }
 
   //firebase db
-  async readDbReference(referenceDB: string): Promise<string[]> {
+  async readDbReference(referenceDB: string): Promise<string[] | Highscores[]> {
     initializeApp(ENV.firebaseConfig);
     const db = getDatabase();
     const refValue = ref(db, referenceDB);
     const snapshot = await get(refValue);
-    return snapshot.exists() ? snapshot.val() : 'error fetching data';
+    return snapshot.exists() ? snapshot.val() : [];
   }
   
-  updateDbReference(referenceDB: string, updatedList: string[]): void {
+  updateDbReference(referenceDB: string, updatedList: string[] | Highscores[]): void {
     const db = getDatabase();
     let updates = {};
     updates[referenceDB] = updatedList;

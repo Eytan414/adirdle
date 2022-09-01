@@ -1,5 +1,7 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { GameService } from 'src/app/services/game.service';
+import { StorageService } from 'src/app/services/storage.service';
 import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
@@ -16,12 +18,18 @@ export class WinDialogComponent implements OnInit{
   timeToNextWord: string;
   translationUrl: string;
 
-  constructor(private utilService: UtilsService, @Inject(MAT_DIALOG_DATA) public data: any,
+  constructor(
+    private utilService: UtilsService,
+    private gameService : GameService,
+    private storageService : StorageService,
+     @Inject(MAT_DIALOG_DATA) public data: any,
               private ref: MatDialogRef<WinDialogComponent>) { }
   
   ngOnInit(): void {
     this.timeToNextWord = this.utilService.calculateTimeToNextWord();
     this.translationUrl = `https://www.morfix.co.il/en/${this.data.dailyWord}`;
+    const username:string = this.storageService.loadFromLocalStorage('username');
+    this.gameService.updateOrCreateUser(username);
   }
   
   startConfirmation():void{ //start of confirmation of word deletion (1sec long press required)

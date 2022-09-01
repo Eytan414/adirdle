@@ -13,8 +13,15 @@ import { NoWordDialogComponent } from './dialogs/no-word-dialog/no-word-dialog.c
 import { WinDialogComponent } from './dialogs/win-dialog/win-dialog.component';
 import { WaitDialogComponent } from './dialogs/wait-dialog/wait-dialog.component';
 import { KeyboardComponent } from './main/keyboard/keyboard.component';
-import { HeaderComponent } from './main/header/header.component';
 import { NextGuessRowComponent } from './main/next-guess-row/next-guess-row.component';
+import { HeaderComponent } from './main/header/header.component';
+import { SigninComponent } from './dialogs/signin-dialog/signin.component';
+import { FormsModule } from '@angular/forms';
+import { HighscoresComponent } from './highscores/highscores.component';
+import { RecordCardComponent } from './highscores/record-card/record-card.component';
+
+import { NgChartsModule } from 'ng2-charts';
+import { ChartComponent } from './highscores/chart/chart.component';
 
 @NgModule({
   declarations: [
@@ -24,8 +31,12 @@ import { NextGuessRowComponent } from './main/next-guess-row/next-guess-row.comp
     WinDialogComponent,
     WaitDialogComponent,
     KeyboardComponent,
+    NextGuessRowComponent,
     HeaderComponent,
-    NextGuessRowComponent
+    SigninComponent,
+    HighscoresComponent,
+    RecordCardComponent,
+    ChartComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +45,9 @@ import { NextGuessRowComponent } from './main/next-guess-row/next-guess-row.comp
     MatDialogModule,
     MatSnackBarModule,
     MatIconModule,
-    DragDropModule
+    DragDropModule,
+    FormsModule,
+    NgChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

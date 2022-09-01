@@ -1,0 +1,21 @@
+<div [@pulse]="animateReverse" class="highscores-container">
+    <button class='close' mat-button [mat-dialog-close]>✖</button>
+    <h2>Records</h2>
+
+    <div class="records">
+        <app-record-card
+            *ngFor='let userRecord of allRecords' 
+            [hidden]="!userRecord?.name" 
+            [userRecord]="userRecord"
+            (click)="showChart(userRecord)">
+        </app-record-card>
+        <!-- <app-chart *ngIf="displayChart" [data5]="data5" [labels5]="labels5"></app-chart>
+        <app-chart [data6]="data6" [labels6]="labels6"></app-chart> -->
+    </div>
+        <canvas baseChart id="idid" *ngIf="displayChart" 
+            [data]="data5"
+            [options]="barChartOptions"
+            [labels]="labels5"
+            [type]="'bar'">
+        </canvas>
+</div>
