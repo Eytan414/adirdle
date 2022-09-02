@@ -1,9 +1,9 @@
 export interface Dataset{
     data: Array<any>,
     label?: string,
+    fill?:string,
 }
 export interface GraphData{
-  type:	string,
   labels?:	string[],
   parsing?: boolean | object,
   datasets: Array<Dataset>
@@ -21,10 +21,19 @@ export const BAR_CHART_OPTIONS_5 = {
       legend: {
         display: false
       },
-    }
+    },
+    scales: {
+      x: {
+        display: true,
+      },
+      y: {
+        type: 'logarithmic',
+        display: true,
+      }
+    },
  };
 export const BAR_CHART_OPTIONS_6 = {
-    responsive: false,
+  responsive: true,
     plugins: {
       title:{
         display: true,
@@ -32,6 +41,15 @@ export const BAR_CHART_OPTIONS_6 = {
       },
       legend: {
         display: false
+      },
+      scales: {
+        x: {
+          display: true,
+        },
+        y: {
+          type: 'logarithmic',
+          display: true,
+        }
       },
     }
  };

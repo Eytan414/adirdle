@@ -39,7 +39,7 @@ export class HighscoresComponent implements OnInit {
   labels5:string[] = [];
   labels6:string[] = [];
   displayChart: boolean = false;
-  chartOptions5:ChartConfiguration<'radar'>['options'] = BAR_CHART_OPTIONS_5;
+  chartOptions5:ChartConfiguration<any>['options'] = BAR_CHART_OPTIONS_5;
   chartOptions6:ChartConfiguration<'radar'>['options'] = BAR_CHART_OPTIONS_6;
   title: string = DEFAULT_TITLE;
   constructor(private storageService:StorageService) { }
@@ -56,15 +56,14 @@ export class HighscoresComponent implements OnInit {
     this.labels5 = [];
     this.labels6 = [];
     this.data5 = {
-      type: 'bar',
       datasets: [{ 
           data: [],
+          fill: 'blue',
         }],
         labels:[]
       };
       this.data6 = {
         parsing: false,
-        type: 'bar',
         datasets: [{ 
           data: [],
       }]
