@@ -1,6 +1,5 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-no-word-dialog',

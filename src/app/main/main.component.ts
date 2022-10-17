@@ -1,7 +1,7 @@
 import { Guess } from '../models/Guess';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, ViewChild, ViewEncapsulation, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { animate, keyframes, style, transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger, sequence } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NoWordDialogComponent } from '../dialogs/no-word-dialog/no-word-dialog.component';
@@ -18,6 +18,7 @@ import { ColorMarkings } from '../models/ColorMarking';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmailService } from '../services/email.service';
 import { GameService } from '../services/game.service';
+import { ANIMATION_LENGTH } from '../constants';
 
 @Component({
   selector: 'app-main',
@@ -26,11 +27,11 @@ import { GameService } from '../services/game.service';
   animations: [
     trigger("flip", [
       transition(":enter", [
-        animate(1500, keyframes([
-          style({ transform: "rotateX(90deg) rotateZ(270deg) rotateY(180deg)" }),
-          style({ transform: "rotateX(0) rotateZ(0) rotateY(0)" })
-        ])
-        )
+        style({ visibility: 'visible' }),
+sequence([
+  animate(ANIMATION_LENGTH/2, style({ transform: "scale(.2) rotate3d(1, 1, .5, 720deg)" })),
+  animate(ANIMATION_LENGTH/2, style({ transform: "scale(1) rotate3d(0)" })),
+])
       ])
     ])
   ],
@@ -114,6 +115,7 @@ export class MainComponent implements OnInit {
     if (settings) 
     this.keyboardComponent.setupKeyboard(settings);
     this.latestGuesses = this.storageService.loadFromLocalStorage('latestGuesses') || {};
+    
     //case user's guesses are for active puzzle
     if(this.latestGuesses.hasOwnProperty(this.gameModeKey) &&
     this.latestGuesses[this.gameModeKey].word === this.dailyWord){ 

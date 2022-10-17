@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { BAR_CHART_OPTIONS_5, GraphData } from '../constants';
+import { Component, Input } from '@angular/core';
+import { GraphData } from '../constants';
 import { ChartConfiguration } from 'chart.js';
 
 @Component({
@@ -7,16 +7,9 @@ import { ChartConfiguration } from 'chart.js';
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.scss']
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent{
   @Input() data:GraphData;
   @Input() options:ChartConfiguration<any>['options'];
 
   constructor() { }
-
-  ngOnInit(): void {
-
-  
-  }
-
 }
-

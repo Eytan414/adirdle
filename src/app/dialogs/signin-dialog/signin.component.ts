@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -9,9 +9,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class SigninComponent {  
   username: string;
 
-  constructor(
-    public ref: MatDialogRef<SigninComponent>,
-    ) { }
+  constructor(public ref: MatDialogRef<SigninComponent>) { }
   
   disableClick():boolean {
     return !this.username || this.username.length <= 0;

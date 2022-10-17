@@ -2,7 +2,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Injectable } from '@angular/core';
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 import { ENV } from '../../environments/environment';
-import { RECORDS_DB_KEY, USERNAME_KEY } from '../constants';
+import { USERNAME_KEY } from '../constants';
 @Injectable({
   providedIn: 'root'
 })

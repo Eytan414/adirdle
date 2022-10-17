@@ -5,11 +5,10 @@
     position: relative;
     height: 60vh;
     overflow-y: auto;
-    max-width: 40rem;
     margin: 0 auto;
     background-color: var(--bg-color-dialog);
     color: var(--color-dialog);
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 0.75rem;
     box-shadow: inset 0 0 0.25rem 0.25rem #5f5;
     &::-webkit-scrollbar-track {
@@ -35,7 +34,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 1.5rem;
-        justify-content: space-between;
+        justify-content: space-around;
         > * {
             cursor: pointer;
         }

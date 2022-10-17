@@ -3,8 +3,8 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Component, OnInit } from '@angular/core';
 import { RECORDS_DB_KEY } from '../constants';
 import { Highscores } from '../models/Highscores';
-import { BAR_CHART_OPTIONS_5, BAR_CHART_OPTIONS_6, COLORS_BARCA_BLUE, COLORS_BARCA_BURGUNDY, DATASET_OPTIONS, DEFAULT_TITLE, GraphData } from './constants';
-import { ChartConfiguration } from 'chart.js';
+import { BAR_CHART_OPTIONS_5, BAR_CHART_OPTIONS_6, DATASET_OPTIONS, DEFAULT_TITLE } from './constants';
+import { ChartConfiguration, ChartData} from 'chart.js';
 
 @Component({
   selector: 'app-highscores',
@@ -34,11 +34,12 @@ import { ChartConfiguration } from 'chart.js';
 export class HighscoresComponent implements OnInit {
   allRecords: Array<Highscores>;
   animateReverse:boolean = false;
-  data5:GraphData;
-  data6:GraphData;
+  data5:ChartData<'bar'>;
+  data6:ChartData<'bar'>;
   labels5:string[] = [];
   labels6:string[] = [];
   displayChart: boolean = false;
+  
   chartOptions5:ChartConfiguration<any>['options'] = BAR_CHART_OPTIONS_5;
   chartOptions6:ChartConfiguration<any>['options'] = BAR_CHART_OPTIONS_6;
   title: string = DEFAULT_TITLE;
@@ -66,10 +67,10 @@ export class HighscoresComponent implements OnInit {
         data: [],
         ...DATASET_OPTIONS
     }]};
-
     
     const totalGuesses5:number = userRecord.words5.details.reduce((prev:number, cur:number)=> prev + cur, 0);
     const totalGuesses6:number = userRecord.words6.details.reduce((prev:number, cur:number)=> prev + cur, 0);
+
     userRecord.words5.details.forEach((count:number, attempts:number) => {
       this.data5.datasets[0].data.push(count);
       const percentage = (count/totalGuesses5*100).toFixed(2);
