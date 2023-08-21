@@ -25,7 +25,7 @@
                     <div [class.marker]='nextGuess[3]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[3]?.letter }}</div>
                     <div [class.marker]='nextGuess[4]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[4]?.letter }}</div>
                     <div [class.marker]='nextGuess[5]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)" *ngIf="wordLength === 6">{{ nextGuess[5]?.letter }}</div>
-                    <span *ngIf='guesses.length > 3' (click)='helppp()' class="sos">🆘</span>
+                    <span *ngIf='guesses.length >= 3' (click)='helppp()' class="sos">🆘</span>
                 </li>
             </ul>
             <div class="share-wrapper" *ngIf="showShare">

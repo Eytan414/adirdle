@@ -12,7 +12,7 @@
             <div>{{userRecord?.words5.games}}</div>
             <div>{{userRecord?.words5.average}}</div>
         </div>
-        <div class="stats">
+        <div *ngIf="userRecord?.words6.games > 0" class="stats">
             <img src="/assets/icons/number-6.png">
             <div>{{userRecord?.words6.games}}</div>
             <div>{{userRecord?.words6.average}}</div>

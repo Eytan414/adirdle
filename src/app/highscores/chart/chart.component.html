@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="this.data.datasets[0].data.length > 0">
     <canvas baseChart
     [data]="data"
     [options]="options"

@@ -97,13 +97,13 @@ export class GameService {
     return {
       name: username,
       words5: {
-        games:words5games ?? 0, 
-        average:words5average ?? 0,
+        games:words5games, 
+        average:words5average,
         details: words5details ?? {}
       },
       words6: {
-        games:words6games ?? 0, 
-        average:words6average ?? 0,
+        games:words6games, 
+        average:words6average,
         details: words6details ?? {}
       },
     }

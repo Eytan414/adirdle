@@ -446,7 +446,7 @@ export class MainComponent implements OnInit {
       this.checkWord(dailyWord, guess);
   }
 
-  helppp(): void {
+  helppp(): void { //SOS
     for(let [i, letter] of this.dailyWord.split('').entries()) {
       if(!this.colorMarkingSets.green.has(letter)
         && !this.colorMarkingSets.yellow.has(letter)){
