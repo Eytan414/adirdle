@@ -36,7 +36,9 @@
       padding: .5rem;
       border-radius: 1rem;
       margin: 0;
-
+      span{
+        text-shadow:0 0 2rem #fff,  0 0 2.5rem #00107B;
+      }
       a {
         &:link{
           color: coral !important;

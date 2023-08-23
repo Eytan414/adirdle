@@ -3,11 +3,11 @@ export interface Highscores{
   words5: {
     games: number,
     average: number,
-    details: any
+    details: number[]
   },
   words6: {
     games: number,
     average: number,
-    details: any
+    details: number[]
   }
 }

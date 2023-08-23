@@ -29,11 +29,11 @@ body{
         --text-color-keys:var(--app-lightblue);
         --bg-color-dialog: #2b2b2b;
         --bg-color-keyboard: #272b2c;
-        --bg-color-keys: #444;
+        --bg-color-keys: #555;
     }
 
     *{
-        font-family: cursive, Arial, Helvetica, sans-serif;
+        font-family: Arial, Helvetica, sans-serif;
         transition: all .15s ease-out;
         outline: none;
         user-select: none !important;

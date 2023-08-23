@@ -68,10 +68,9 @@ export class HighscoresComponent implements OnInit {
         ...DATASET_OPTIONS
     }]};
     
-    const totalGuesses5:number = userRecord.words5.details.reduce((prev:number, cur:number)=> prev + cur, 0);
-    const totalGuesses6:number = userRecord.words6.details?.reduce((prev:number, cur:number)=> prev + cur, 0);
     
     if(userRecord.words5.games > 0){
+      const totalGuesses5:number = userRecord.words5.details.reduce((prev:number, cur:number)=> prev + cur, 0);
       userRecord.words5.details.forEach((count:number, attempts:number) => {
         this.data5.datasets[0].data.push(count);
         const percentage = (count/totalGuesses5*100).toFixed(2);
@@ -79,8 +78,9 @@ export class HighscoresComponent implements OnInit {
       });
       this.data5.labels = this.labels5;
     }
-
+    
     if(userRecord.words6.games > 0){
+      const totalGuesses6:number = userRecord.words6.details.reduce((prev:number, cur:number)=> prev + cur, 0);
       userRecord.words6.details.forEach((count:number, attempts:number) => {
         this.data6.datasets[0].data.push(count);
         const percentage = (count/totalGuesses6*100).toFixed(2);

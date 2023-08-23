@@ -10,7 +10,6 @@ import { StorageService } from '../services/storage.service';
 import { UtilsService } from '../services/utils.service';
 import { WaitDialogComponent } from '../dialogs/wait-dialog/wait-dialog.component';
 import { KeyboardComponent } from './keyboard/keyboard.component';
-// import { HeaderComponent } from './header/header.component';
 import {HeaderComponent } from './header/header.component';
 
 import { DEFAULT_KEYBOARD_SETTINGS, MOBILE_BREAKPOINT, DEFAULT_KEYBOARD_SETTINGS_MOBILE } from './data';
@@ -18,7 +17,8 @@ import { ColorMarkings } from '../models/ColorMarking';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmailService } from '../services/email.service';
 import { GameService } from '../services/game.service';
-import { ANIMATION_LENGTH } from '../constants';
+import { ANIMATION_LENGTH, RECORDS_DB_KEY, USERNAME_KEY } from '../constants';
+import { Highscores } from '../models/Highscores';
 
 @Component({
   selector: 'app-main',
@@ -64,7 +64,8 @@ export class MainComponent implements OnInit {
   marker: number;
   nextGuessSlots: Array<HTMLDivElement>;
   isRandomWord: boolean = false;
-  
+  username:string;
+
   constructor(
     private storageService: StorageService, 
     private utilService: UtilsService,
@@ -81,8 +82,8 @@ export class MainComponent implements OnInit {
     let hoursSinceRelease = this.utilService.calcHoursSinceRelease();
     let queryParams$ = this.route.queryParams;
 
-    const username = this.storageService.loadFromLocalStorage('username');
-    if(username) this.greet(username)
+    this.username = this.storageService.loadFromLocalStorage('username');
+    if(this.username) this.greet()
     else this.gameService.openSigninDialog();
 
     queryParams$.subscribe(async (queryParams) => {
@@ -91,7 +92,7 @@ export class MainComponent implements OnInit {
       let words:string[] = await this.storageService.readDbReference(this.referenceDB) as string[];
 
       this.validWords = words;
-      this.gameModeKey = `word${this.wordLength}`;
+      this.gameModeKey = `words${this.wordLength}`;
       if (!this.validWords) return;
       
       // this.showNextGuessRow = true;
@@ -200,14 +201,17 @@ export class MainComponent implements OnInit {
     for (let g of this.nextGuess) {
       if (g.state !== 'bullseye') tmpWinFlag = false;
     }
+    //wrong guess
     if (!tmpWinFlag) {
       this.resetNextGuess();
       return;
     }
+    //correct guess
     this.handleWinDialog();
     if(!this.isRandomWord) this.updateLastWIn();
-    this.updatePastScores();
-    //scroll to bottom
+    this.username = this.storageService.loadFromLocalStorage(USERNAME_KEY);
+    this.updateScoresInDB();
+    //scroll to bottom to show correct guess
     document.querySelector('main.guesses').scrollTop = document.querySelector('main.guesses').scrollHeight;
   }
   
@@ -229,19 +233,26 @@ export class MainComponent implements OnInit {
     this.storageService.saveToLocalStorage('lastWin', this.lastUsersWin);
   }
 
-  updatePastScores() {
-    let pastScores = this.storageService.loadFromLocalStorage('pastScores') || {};
-    let guessCountKey = `${this.guesses.length}`;
+  async updateScoresInDB() {
+    let usersInDB = await this.storageService.readDbReference(RECORDS_DB_KEY) as Highscores[];
+    usersInDB = usersInDB.filter(r => r);//remove empty
+    const userIndex = usersInDB.findIndex(user => user?.name.toLowerCase() === this.username.toLowerCase());
+    
+    const numberOfGuesses = this.guesses.length;
+    const userRecordCurrentMode = usersInDB[userIndex][this.gameModeKey];
 
-    if (!pastScores[this.gameModeKey]) pastScores[this.gameModeKey] = {[guessCountKey]: 1};
-    else{
-      pastScores[this.gameModeKey].hasOwnProperty(guessCountKey) ?
-        pastScores[this.gameModeKey][guessCountKey] = pastScores[this.gameModeKey][guessCountKey] + 1 :
-        pastScores[this.gameModeKey][guessCountKey] = 1;
-    }
-    this.storageService.saveToLocalStorage('pastScores', pastScores);
+    userRecordCurrentMode.details[numberOfGuesses] =
+    userRecordCurrentMode.details[numberOfGuesses] === undefined 
+    ? 1 
+    : userRecordCurrentMode.details[numberOfGuesses] + 1;
+    
+    const [average, games] = this.gameService.getUserAverageAndGames(userRecordCurrentMode);
+    userRecordCurrentMode.average = average;
+    userRecordCurrentMode.games = games;
+
+    this.storageService.updateDbReference(RECORDS_DB_KEY, usersInDB);
   }
-
+  
   checkWord(dailyWord: string, guess: Guess[]): void {
     for(let g of guess) {
       g.state = "checked";
@@ -312,6 +323,7 @@ export class MainComponent implements OnInit {
       this.keyboardComponent.setupKeyboard(this.storageService.loadFromLocalStorage('keyboardPrefs'));
     });
   }
+
   handleNoWordDialog(currentGuess: string) {
     this.enableControls = false;
 
@@ -334,7 +346,6 @@ export class MainComponent implements OnInit {
             this.validWords.push(currentGuess);
             let newWordList: string[] = this.validWords;
             this.storageService.updateDbReference(this.referenceDB, newWordList);
-            // let avgToWin = this.gameService.calculateUserAverageGuessesLength(this.wordLength) as string;
             this.emailService.sendEmail('הוספה', currentGuess);
           }
         });
@@ -374,16 +385,6 @@ export class MainComponent implements OnInit {
     this.storageService.saveToLocalStorage('darkMode', this.darkMode);
   }
   
-  toggleOverflow(el:HTMLElement):void{
-    if(el.style.overflowY === 'hidden'){
-      el.style.maxHeight = '50vh';
-      el.style.overflowY = 'auto';
-    }else{
-      el.style.maxHeight = '100%';
-      el.style.overflowY = 'hidden';
-    }
-    el.offsetHeight;
-  }
   async shareImage(){
     let divToCapture:HTMLDivElement = <HTMLDivElement>document.querySelector("main.guesses");    
     this.toggleDivCss(divToCapture);
@@ -467,8 +468,8 @@ export class MainComponent implements OnInit {
   focusFooter(){
     this.showFooterOnTop = true;
   }
-  greet(username:string){
-    this._snackBar.open(`Hello ${username}`, undefined, {
+  greet(){
+    this._snackBar.open(`Hello ${this.username}`, undefined, {
       panelClass: "snackbar", duration: 1000 
     })
   }

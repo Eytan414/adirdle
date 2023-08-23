@@ -3,6 +3,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Guess } from '../../models/Guess';
+import { USERNAME_KEY } from 'src/app/constants';
+import { StorageService } from 'src/app/services/storage.service';
+
 @Component({
   selector: 'app-wait-dialog',
   templateUrl: './wait-dialog.component.html',
@@ -16,18 +19,25 @@ export class WaitDialogComponent implements OnInit {
   attemptToSolveWord:number;
   averageGuessesPerWord:number | string;
   gamesCount: string;
+  reaction: string;
 
   constructor(
     private utilService: UtilsService,
+    private storageService: StorageService,
     private gameService: GameService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.timeToNextWord = this.utilService.calculateTimeToNextWord();
     this.assignIncomingData();
+    const guessCount = this.guesses.length;
+    this.reaction = this.gameService.randomizeReaction(guessCount);
     
-    let result = this.gameService.calculateUserAverageGuessesLength(this.wordLength, true);
+    const username = this.storageService.loadFromLocalStorage(USERNAME_KEY);
+    const user = await this.gameService.getUserStats(username);
+
+    let result = this.gameService.getUserAverageAndGames(user[`words${this.wordLength}`]);
     [this.averageGuessesPerWord, this.gamesCount] = result;
   }
 

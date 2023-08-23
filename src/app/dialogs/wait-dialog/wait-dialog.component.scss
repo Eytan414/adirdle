@@ -35,6 +35,9 @@
                 position: relative;
                 top: -0.5rem;
             }
+            span{
+                text-shadow:0 0 2rem #fff,  0 0 2.5rem #00107B;
+              }
         }
         div.time-to-next-word{
             font-size: 2.5rem;

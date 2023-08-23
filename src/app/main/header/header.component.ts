@@ -16,6 +16,7 @@ export class HeaderComponent  {
   @Output() toggleDarkModeEmitter = new EventEmitter<null>();
   @Output() resetKeyboardPositionEmitter = new EventEmitter<null>();
   @Output() randomizeWordEmitter = new EventEmitter<null>();
+  recordsOpen: boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -41,10 +42,12 @@ export class HeaderComponent  {
     this.randomizeWordEmitter.emit();
   }
   openRecords():void{
-    this.dialog.open(HighscoresComponent, {
+    this.recordsOpen = true;
+    const dialog = this.dialog.open(HighscoresComponent, {
       panelClass: 'win-dialog',
       disableClose: true, hasBackdrop: false,
     });
+    dialog.afterClosed().subscribe(() => { this.recordsOpen = false; });
   }
 
 }

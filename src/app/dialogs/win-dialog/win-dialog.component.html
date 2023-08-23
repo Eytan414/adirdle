@@ -1,6 +1,6 @@
 <div class="win-container">
     <div class="top-wrapper">
-        <button class="close" mat-button [mat-dialog-close]>✖</button>
+        <button class="close" mat-button [mat-dialog-close] (click)='fireworksOff()'>✖</button>
         
         <h3>Way to go! Congratulations!!</h3>
         <h3>
@@ -8,7 +8,7 @@
             <a target="_blank" [href]="translationUrl">
                 <strong>{{data.dailyWord | uppercase}}</strong> 
             </a>
-            found in {{data.guesses.length}} guesses
+            found in {{data.guesses.length}} guesses <span>{{reaction}}</span>
         </h3>
 
         <div class='challenge-wrapper'>
