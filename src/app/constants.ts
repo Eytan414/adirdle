@@ -9,7 +9,7 @@ export const fireworksOptions:any =  {
     acceleration: 1,
     friction: 0.97,
     gravity: 1.5,
-    particles: 50,
+    particles: 20,
     traceLength: 3,
     traceSpeed: 8,
     explosion: 5,
@@ -21,12 +21,12 @@ export const fireworksOptions:any =  {
       max: 360
     },
     delay: {
-      min: 3,
-      max: 60
+      min: 1,
+      max: 20
     },
     rocketsPoint: {
-      min: 50,
-      max: 50
+      min: 5,
+      max: 15
     },
     lineWidth: {
       explosion: {
