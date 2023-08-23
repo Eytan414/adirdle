@@ -92,11 +92,11 @@ export const emptyEntry:Highscore = {
   words5: {
     games:0, 
     average:0,
-    details: []
+    details: [,]
   },
   words6: {
     games:0, 
     average:0,
-    details: []
+    details: [,]
   },
 };

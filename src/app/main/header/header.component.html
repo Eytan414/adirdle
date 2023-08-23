@@ -8,7 +8,9 @@
             ⌨️
         </button>    
     </div>
-    <a [href]="enableControls ? '/?mode=5' : 'javascript:void(0)'">Adirdle</a>
+    <!-- <a [href]="enableControls ? '/?mode=5' : 'javascript:void(0)'">Adirdle</a> -->
+    <div class="image-wrapper"></div>
+
     <div class="right-btns">
         <button [disabled]="!enableControls" (click)="switchGameMode()" class="toggle-word-count-wrapper">
             <img [ngClass]="{'word6': wordLength === 6}" title="Switch to 5 word puzzle">

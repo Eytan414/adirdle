@@ -45,6 +45,15 @@ header{
         color: var(--app-title-color);
         text-decoration: none;
     }
+    div.image-wrapper{
+        height: 5rem;
+        width: 5rem;
+        background-size: contain;
+        background-image: url(/assets/images/b.png);
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
     .right-btns{
         .toggle-word-count-wrapper img{
             content:url('/assets/icons/number-6.png');
