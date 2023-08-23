@@ -3,8 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GameService } from 'src/app/services/game.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { Fireworks } from 'fireworks-js';
-import { fireworksOptions } from 'src/app/constants'
 @Component({
   selector: 'app-win-dialog',
   templateUrl: './win-dialog.component.html',
@@ -19,7 +17,6 @@ export class WinDialogComponent implements OnInit{
   timeToNextWord: string;
   translationUrl: string;
   reaction: string;
-  fireworksRef: any;
 
   constructor(
     private utilService: UtilsService,
@@ -29,22 +26,17 @@ export class WinDialogComponent implements OnInit{
               private ref: MatDialogRef<WinDialogComponent>) { }
   
   ngOnInit(): void {
-    const container = document.querySelector('.main-container');
-    const fireworks = new Fireworks(container, fireworksOptions);
-    this.fireworksRef = fireworks;
-    fireworks.start();
-
+    this.gameService.startFireworks();
     
     this.timeToNextWord = this.utilService.calculateTimeToNextWord();
     this.translationUrl = `https://www.morfix.co.il/en/${this.data.dailyWord}`;
     const guessCount = this.data.guesses.length;
     this.reaction = this.gameService.randomizeReaction(guessCount);
-    // const username:string = this.storageService.loadFromLocalStorage('username');
-    // this.gameService.updateOrCreateUser(username);
+    
   }
-  
-  fireworksOff(){
-    this.fireworksRef.stop(true);
+
+  stopFireworks(){
+    this.gameService.stopFireworks();
   }
   
   startConfirmation():void{ //start of confirmation of word deletion (1sec long press required)
@@ -63,7 +55,7 @@ export class WinDialogComponent implements OnInit{
       this.killTimeout();
     } else {
       navigator.vibrate(200);
-      this.fireworksOff();
+      this.stopFireworks();
       this.ref.close(true);
     }
   }

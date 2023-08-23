@@ -1,5 +1,5 @@
 <div class="wait-container">
-    <button mat-button [mat-dialog-close]>✖</button>
+    <button mat-button [mat-dialog-close] (click)='stopFireworks()'>✖</button>
     <div>
         Adirdle{{wordLength}} already solved🥳
     </div>
@@ -17,7 +17,7 @@
     <div>
         Next word in:
         <div class="time-to-next-word">
-            {{timeToNextWord}}⌛
+            {{timeToNextWord}} <span>⌛</span>
         </div>
     </div>
 </div>

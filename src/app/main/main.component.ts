@@ -241,15 +241,21 @@ export class MainComponent implements OnInit {
     const numberOfGuesses = this.guesses.length;
     const userRecordCurrentMode = usersInDB[userIndex][this.gameModeKey];
 
-    userRecordCurrentMode.details[numberOfGuesses] =
-    userRecordCurrentMode.details[numberOfGuesses] === undefined 
-    ? 1 
-    : userRecordCurrentMode.details[numberOfGuesses] + 1;
-    
     const [average, games] = this.gameService.getUserAverageAndGames(userRecordCurrentMode);
-    userRecordCurrentMode.average = average;
-    userRecordCurrentMode.games = games;
+    userRecordCurrentMode['average'] = average;
+    userRecordCurrentMode['games'] = games;
 
+    if(userRecordCurrentMode.details){//user played level ${gameModeKey} previously
+      if(userRecordCurrentMode.details[numberOfGuesses])//and found word in ${numberOfGuesses} previously
+        userRecordCurrentMode.details[numberOfGuesses] = userRecordCurrentMode.details[numberOfGuesses] + 1;
+      else //and first time found word in ${numberOfGuesses}
+        userRecordCurrentMode['details'][numberOfGuesses] = 1;
+
+    } else {//user won level ${gameModeKey} for the first time
+        userRecordCurrentMode['details'] = [];
+        userRecordCurrentMode['details'][numberOfGuesses] = 1;
+    }
+    
     this.storageService.updateDbReference(RECORDS_DB_KEY, usersInDB);
   }
   

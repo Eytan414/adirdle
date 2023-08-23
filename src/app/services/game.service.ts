@@ -8,6 +8,8 @@ import { SigninComponent } from '../dialogs/signin-dialog/signin.component';
 import { MatDialog } from '@angular/material/dialog';
 import { RECORDS_DB_KEY, respnoses } from '../constants';
 import { of } from 'rxjs';
+import { Fireworks } from 'fireworks-js';
+import { fireworksOptions } from 'src/app/constants'
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +18,8 @@ export class GameService {
   private words5key:string = '5';   
   private words6key:string = '6';
   users:Array<Highscores>;
+  fireworksRef: any;
+
   constructor(
     private storageService:StorageService,
     private dialog: MatDialog,
@@ -93,12 +97,12 @@ export class GameService {
       words5: {
         games:words5games, 
         average:words5average,
-        details: user['words5'].details ?? []
+        details: user['words5'].details ?? [,]
       },
       words6: {
         games:words6games, 
         average:words6average,
-        details: user['words6'].details ?? []
+        details: user['words6'].details ?? [,]
       },
     })
   }
@@ -110,7 +114,7 @@ export class GameService {
       totalGuesses += userData.details[key] * (+key);
       gamesPlayed += userData.details[key];
     }
-    const avg = (totalGuesses / gamesPlayed).toFixed(2);
+    const avg = gamesPlayed === 0 ? 0 : (totalGuesses / gamesPlayed).toFixed(2);
     return [avg, gamesPlayed];
   }
 
@@ -126,4 +130,13 @@ export class GameService {
     return respnoses[guessCount-1][randomizedIndex];
   }
 
+  startFireworks(){
+    const container = document.querySelector('.main-container');
+    const fireworks = new Fireworks(container, fireworksOptions);
+    this.fireworksRef = fireworks;
+    fireworks.start();
+  }
+  stopFireworks(){
+    this.fireworksRef.stop(true);
+  }
 }

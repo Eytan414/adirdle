@@ -39,8 +39,13 @@ export class WaitDialogComponent implements OnInit {
 
     let result = this.gameService.getUserAverageAndGames(user[`words${this.wordLength}`]);
     [this.averageGuessesPerWord, this.gamesCount] = result;
+    this.gameService.startFireworks();
   }
 
+  stopFireworks(){
+    this.gameService.stopFireworks();
+  }
+  
   private assignIncomingData() {
     this.solvedWord = this.data.solvedWord;
     this.guesses = this.data.guesses;

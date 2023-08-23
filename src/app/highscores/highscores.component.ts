@@ -68,28 +68,27 @@ export class HighscoresComponent implements OnInit {
         ...DATASET_OPTIONS
     }]};
     
-    
-    if(userRecord.words5.games > 0){
-      const totalGuesses5:number = userRecord.words5.details.reduce((prev:number, cur:number)=> prev + cur, 0);
-      userRecord.words5.details.forEach((count:number, attempts:number) => {
-        this.data5.datasets[0].data.push(count);
-        const percentage = (count/totalGuesses5*100).toFixed(2);
-        this.labels5.push(`${attempts} attempts (${percentage}%)`);
-      });
-      this.data5.labels = this.labels5;
-    }
-    
-    if(userRecord.words6.games > 0){
-      const totalGuesses6:number = userRecord.words6.details.reduce((prev:number, cur:number)=> prev + cur, 0);
-      userRecord.words6.details.forEach((count:number, attempts:number) => {
-        this.data6.datasets[0].data.push(count);
-        const percentage = (count/totalGuesses6*100).toFixed(2);
-        this.labels6.push(`${attempts} attempts (${percentage}%)`);
-      });
-      this.data6.labels = this.labels6;
-    }
+    this.populateDatasetAndLabels(userRecord.words5, 5);
+    this.populateDatasetAndLabels(userRecord.words6, 6);
 
     this.displayChart = true;
+  }
+  private populateDatasetAndLabels(userRecord:any, gameModeLength: number):void{
+    if(userRecord.games > 0){
+      let keys = []; //attempts until win
+      let values = []; //number of occurences
+      for (const k in userRecord.details){
+         keys.push(`${k} attempts`);
+      }
+      for (const v of userRecord.details){
+        if(!v) continue;
+        this.data6.datasets[0].data.push(+v);
+        values.push(v); 
+      }
+      gameModeLength === 5 ?
+        this.data5.labels = keys:
+        this.data6.labels = keys;
+    }
   }
 
   backClicked(){
