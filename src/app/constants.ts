@@ -5,15 +5,27 @@ export const USERNAME_KEY:string = 'username';
 export const ANIMATION_LENGTH:number = 750;
 export const fireworksOptions:any =  {
     autoresize: true,
+    sound:{
+      enabled: true,
+      files: [
+        '../assets/sounds/explosion0.mp3',
+        '../assets/sounds/explosion1.mp3',
+        '../assets/sounds/explosion2.mp3'
+      ],
+      volume: {
+        min: 3,
+        max: 9
+      }
+    },
     opacity: 0.6,
     acceleration: 1,
     friction: 0.97,
-    gravity: 1.5,
-    particles: 20,
-    traceLength: 3,
+    gravity: 2,
+    particles: 33,
+    traceLength: 4,
     traceSpeed: 8,
-    explosion: 5,
-    intensity: 30,
+    explosion: 9,
+    intensity: 1,
     flickering: 50,
     lineStyle: 'round',
     hue: {
@@ -25,17 +37,17 @@ export const fireworksOptions:any =  {
       max: 20
     },
     rocketsPoint: {
-      min: 5,
-      max: 15
+      min: 22,
+      max: 55
     },
     lineWidth: {
       explosion: {
-        min: 1,
-        max: 3
+        min: 3,
+        max: 9
       },
       trace: {
         min: 1,
-        max: 2
+        max: 9
       }
     },
     brightness: {

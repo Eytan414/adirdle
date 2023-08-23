@@ -82,7 +82,9 @@ export class HighscoresComponent implements OnInit {
       }
       for (const v of userRecord.details){
         if(!v) continue;
-        this.data6.datasets[0].data.push(+v);
+        gameModeLength === 5 ?
+          this.data5.datasets[0].data.push(+v):
+          this.data6.datasets[0].data.push(+v);
         values.push(v); 
       }
       gameModeLength === 5 ?
