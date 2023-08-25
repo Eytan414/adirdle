@@ -466,6 +466,17 @@ export class MainComponent implements OnInit {
     }
   }
   
+  PANIC(){//I'm desperate, just reveal the damn letter 
+    for(let [i, letter] of this.dailyWord.split('').entries()) {
+      if(!this.colorMarkingSets.green.has(letter)){
+        this.nextGuess[i].letter = letter;
+        this.nextGuess[i].state = 'bullseye';
+        this.colorMarkingSets.green.add(letter);
+        this.setMarker(i+1);
+        break;
+      }
+    }
+  }
   letterSlotClicked($event: MouseEvent | TouchEvent){
     let currentTarget = $event.target as HTMLDivElement;
     let newMarkerIndex = Array.from(this.nextGuessSlots).indexOf(currentTarget);

@@ -36,8 +36,9 @@
                 top: -0.5rem;
             }
             span{
-                text-shadow:0 0 2rem #fff,  0 0 2.5rem #00107B;
-              }
+                text-shadow: 0 0 1rem #fff, 0 0 1rem gold;
+                font-weight: bold;
+            }
         }
         div.time-to-next-word{
             font-size: 2.5rem;

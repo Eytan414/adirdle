@@ -22,6 +22,7 @@ import { RecordCardComponent } from './highscores/record-card/record-card.compon
 
 import { NgChartsModule } from 'ng2-charts';
 import { ChartComponent } from './highscores/chart/chart.component';
+import { LongpressDirective } from './directives/longpress.directive';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ChartComponent } from './highscores/chart/chart.component';
     SigninComponent,
     HighscoresComponent,
     RecordCardComponent,
-    ChartComponent
+    ChartComponent,
+    LongpressDirective
   ],
   imports: [
     BrowserModule,
