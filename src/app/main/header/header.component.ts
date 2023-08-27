@@ -1,3 +1,4 @@
+import { GameService } from './../../services/game.service';
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { HighscoresComponent } from '../../highscores/highscores.component';
@@ -16,6 +17,7 @@ export class HeaderComponent  {
   @Output() toggleDarkModeEmitter = new EventEmitter<null>();
   @Output() resetKeyboardPositionEmitter = new EventEmitter<null>();
   @Output() randomizeWordEmitter = new EventEmitter<null>();
+  @Output() placeKnownEmitter = new EventEmitter<null>();
   recordsOpen: boolean = false;
 
   constructor(
@@ -29,6 +31,9 @@ export class HeaderComponent  {
     this.didPlayerWin = changes.didPlayerWin?.currentValue ?? this.didPlayerWin;
   }
 
+  placeKnown(){
+    this.placeKnownEmitter.emit();
+  }
   resetKeyboardPosition(){
     this.resetKeyboardPositionEmitter.emit();
   }

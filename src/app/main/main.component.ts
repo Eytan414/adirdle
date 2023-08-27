@@ -502,5 +502,14 @@ export class MainComponent implements OnInit {
       panelClass: "snackbar", duration: 1000 
     })
   }
-
+  placeKnown(){
+    for(let guess of this.guesses) {
+      for(const [i, letterObj] of guess.entries()) {
+        if(letterObj.state === "bullseye"){
+          this.nextGuess[i].letter = letterObj.letter;
+          this.nextGuess[i].state = "bullseye";
+        }
+      }
+    }
+  }
 }

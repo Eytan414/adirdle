@@ -32,7 +32,7 @@ export class GameService {
     return count;
   }
   
-  filter(node:HTMLElement):boolean {
+  private filter(node:HTMLElement):boolean {
     if(node.nodeType === Node.ELEMENT_NODE) {
       if(node.className.includes('next-guess') ||
          node.className.includes('share-wrapper')
@@ -138,5 +138,9 @@ export class GameService {
   }
   stopFireworks(){
     this.fireworksRef.stop(true);
+  }
+
+  placeKnown(){
+
   }
 }
