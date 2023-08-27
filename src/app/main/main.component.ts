@@ -65,6 +65,9 @@ export class MainComponent implements OnInit {
   nextGuessSlots: Array<HTMLDivElement>;
   isRandomWord: boolean = false;
   username:string;
+  panicLevel:string = '';
+  indexesByWordLength = [];
+
 
   constructor(
     private storageService: StorageService, 
@@ -88,6 +91,7 @@ export class MainComponent implements OnInit {
 
     queryParams$.subscribe(async (queryParams) => {
       if(queryParams.mode) this.wordLength = +queryParams.mode;
+      this.indexesByWordLength = Array.from(Array(this.wordLength), (_,i)=> i);
       this.referenceDB = this.wordLength === 5 ? 'words5' : 'words6';
       let words:string[] = await this.storageService.readDbReference(this.referenceDB) as string[];
 
@@ -452,8 +456,12 @@ export class MainComponent implements OnInit {
     for( let guess of guesses)
       this.checkWord(dailyWord, guess);
   }
+  panicAlert(){
+    this.panicLevel = 'panic';
+  }
 
   helppp(): void { //SOS
+    this.panicLevel = '';
     for(let [i, letter] of this.dailyWord.split('').entries()) {
       if(!this.colorMarkingSets.green.has(letter)
         && !this.colorMarkingSets.yellow.has(letter)){
@@ -466,7 +474,11 @@ export class MainComponent implements OnInit {
     }
   }
   
-  PANIC(){//I'm desperate, just reveal the damn letter 
+  PANIC(){//I'm desperate, just reveal the damn letter!
+    this.panicLevel = '';
+    this._snackBar.open(`😈`, undefined, {
+      panelClass: ['snackbar', 'big'], duration: 800 
+    })
     for(let [i, letter] of this.dailyWord.split('').entries()) {
       if(!this.colorMarkingSets.green.has(letter)){
         this.nextGuess[i].letter = letter;

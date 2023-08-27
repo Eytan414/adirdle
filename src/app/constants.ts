@@ -68,22 +68,42 @@ export const fireworksOptions:any =  {
 export const respnoses:string[][] = [
   [
     "AMAZING!!!🏆",
-    "WOW! WOW!! WOW!!!😲"
+    "INSANE!!!🤯",
+    "WOW! WOW!! WOW!!!😲",
+    "Did you cheat??!🎯",
   ],
   [
     "INCREDIBLE!!!💯" ,
-    "ASTONISHING🥇"
+    "Outstanding!!! 🔥" ,
+    "ASTONISHING🥇",
+    "Did you cheat??🎯",
   ],
   [
-    "Impressive✌️" ,
+    "Impressive💥" ,
+    "Professional🎆",
+    "Fantastic💫",
+    "Terrific 🚀",
+    "Delightful🤩",
+  ],
+  [
     "Wonderful🙌",
-    "Nailed it🤩",
+    "Nailed it🤙",
+    "Very good👏",
+    "Good job😎"
   ],
   [
-    "Nice!",
-    "Very good👍",
+    "Nice👍",
+    "Good🤘",
+    "Success✌️",
     "Done👌",
-    "Good job😎"
+  ],
+  [
+    "Not bad",
+    "Don't worry about it🤞",
+    "Practice makes perfect💪",
+    "Hang in there🤞",
+    "Stay strong💪",
+    "Never give up💪",
   ]
 ];
 

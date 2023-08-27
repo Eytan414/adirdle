@@ -68,9 +68,13 @@ body{
             color: wheat;
             display: flex;
             justify-content: center;
-            
+            &.big .mat-simple-snackbar span{
+                padding: 1rem;
+                font-size: 2.8rem;
+            }
             .mat-simple-snackbar{
                 font-size: 1rem;
+           
                 button{
                     background: transparent;
                     color: var(--mom-shadow-color);
@@ -195,6 +199,7 @@ body{
                     cursor: pointer;
                     transform: translateY(-50%);
                     font-size: 2rem;
+                    transition: all 5s; 
 
                     &.clear-guess{
                         left: -3rem;
@@ -202,10 +207,16 @@ body{
                     &.sos{
                         right: -3rem;
                     }
+                    &.panic{
+                        transform: scale(3) translate(-10vw, -10vh);
+                    }
                 }
                 div{
                     background: #555;
                     font-size: min(5vw, 2.5rem);
+                    &.daily-word{
+                        background: #ddd;
+                    }
                     &.marker{
                         box-shadow: var(--marked-box-shadow);
                     }

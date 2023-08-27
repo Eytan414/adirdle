@@ -17,15 +17,14 @@
                         {{ guess.letter }}
                     </div>
                 </li>
-                <li [class.word6]="wordLength === 6" #nextGuessWrapper [ngClass]='{hide: didPlayerWin}' class='next-guess'>
+                
+                <li [class.word6]="wordLength === 6" #nextGuessWrapper [ngClass]='{"hide": didPlayerWin,"daily-word": !isRandomWord}' class='next-guess'>
                     <span (click)='resetNextGuess()' class="clear-guess">🗑️</span>
-                    <div [class.marker]='nextGuess[0]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[0]?.letter }}</div>
-                    <div [class.marker]='nextGuess[1]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[1]?.letter }}</div>
-                    <div [class.marker]='nextGuess[2]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[2]?.letter }}</div>
-                    <div [class.marker]='nextGuess[3]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[3]?.letter }}</div>
-                    <div [class.marker]='nextGuess[4]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[4]?.letter }}</div>
-                    <div [class.marker]='nextGuess[5]?.marker' (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)" *ngIf="wordLength === 6">{{ nextGuess[5]?.letter }}</div>
-                    <span *ngIf='guesses.length >= 3' [duration]="1500" (longClick)='PANIC()' (click)='helppp()' class="sos">🆘</span>
+                    <div *ngFor='let index of indexesByWordLength' [class.marker]='nextGuess[index]?.marker'
+                         (click)="letterSlotClicked($event)" (touchend)="letterSlotClicked($event)">{{ nextGuess[index]?.letter }}</div>
+                    <span [ngClass]="panicLevel" class="sos" *ngIf='guesses.length >= 3'
+                          (mousedown)="panicAlert()" (touchstart)="panicAlert()"
+                          (longClick)='PANIC()' (click)='helppp()'>🆘</span>
                 </li>
             </ul>
             <div class="share-wrapper" *ngIf="showShare">
