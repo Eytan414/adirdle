@@ -126,9 +126,10 @@ export class GameService {
   }
 
   randomizeReaction(guessCount:number):string{
-    const responseCount = respnoses[guessCount-1].length;
+    const index = guessCount >= 7 ? 6 : guessCount-1; //fallback to last responses index
+    const responseCount = respnoses[index].length;
     const randomizedIndex = Math.round(Math.random() * responseCount);
-    return respnoses[guessCount-1][randomizedIndex];
+    return respnoses[index][randomizedIndex];
   }  
 
   startFireworks(){

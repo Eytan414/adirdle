@@ -121,13 +121,12 @@ div[class*='line'] span {
     background: var(--bg-color-keys);
     color: var(--text-color-keys);
     border-radius: 0.6rem;
-    // text-shadow: 0px 0px 1rem var(--app-lightblue), 
-    //     0px 0px 3rem var(--app-lightblue);
+    
     text-align: center;
     align-self: center;
 
     &:active{
-        transform: translateY(-1em) scale(1.5);
+        transform: translateY(-1.3em) scale(1.3);
     }
 }
 

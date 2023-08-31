@@ -104,6 +104,14 @@ export const respnoses:string[][] = [
     "Hang in there🤞",
     "Stay strong💪",
     "Never give up💪",
+  ],
+  [
+    "Really?!",
+    "Shhhhhh🤫",
+    "Is it your first game?",
+    "Embarrassing...",
+    "You can do better",
+    "At least you got it",
   ]
 ];
 
