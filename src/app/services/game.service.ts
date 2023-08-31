@@ -126,9 +126,10 @@ export class GameService {
   }
 
   randomizeReaction(guessCount:number):string{
-    const randomizedIndex = Math.round(Math.random() * (respnoses[guessCount-1].length));
+    const responseCount = respnoses[guessCount-1].length;
+    const randomizedIndex = Math.round(Math.random() * responseCount);
     return respnoses[guessCount-1][randomizedIndex];
-  }
+  }  
 
   startFireworks(){
     const container = document.querySelector('.main-container');
@@ -138,9 +139,5 @@ export class GameService {
   }
   stopFireworks(){
     this.fireworksRef.stop(true);
-  }
-
-  placeKnown(){
-
   }
 }

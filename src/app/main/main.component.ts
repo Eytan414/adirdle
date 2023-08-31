@@ -1,7 +1,7 @@
 import { Guess } from '../models/Guess';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, ViewChild, ViewEncapsulation, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { animate, style, transition, trigger, sequence } from '@angular/animations';
+import { animate, style, transition, trigger, sequence, state, keyframes } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NoWordDialogComponent } from '../dialogs/no-word-dialog/no-word-dialog.component';
@@ -28,16 +28,32 @@ import { Highscores } from '../models/Highscores';
     trigger("flip", [
       transition(":enter", [
         style({ visibility: 'visible' }),
-sequence([
-  animate(ANIMATION_LENGTH/2, style({ transform: "scale(.2) rotate3d(1, 1, .5, 720deg)" })),
-  animate(ANIMATION_LENGTH/2, style({ transform: "scale(1) rotate3d(0)" })),
-])
+        sequence([
+          animate(ANIMATION_LENGTH/2, style({ transform: "scale(.2) rotate3d(1, 1, .5, 720deg)" })),
+          animate(ANIMATION_LENGTH/2, style({ transform: "scale(1) rotate3d(0)" })),
+        ])
+      ])
+    ]), trigger('shake', [
+      transition('* <=> *', [
+        animate('.5s', keyframes([
+            style({ translate: 0, offset: 0 }),
+            style({ translate: '.5rem', offset: 0.125 }),
+            style({ translate: '-.5rem', offset: 0.25 }),
+            style({ translate: '.5rem', offset: 0.375 }),
+            style({ translate: '-.5rem', offset: 0.5 }),
+            style({ translate: '.5rem', offset: 0.625 }), 
+            style({ translate: '-.5rem', offset: 0.75 }),
+            style({ translate: '.5rem', offset: 0.875 }), 
+            style({ translate: 0, offset: 1.0 })  
+        ]))
       ])
     ])
   ],
   encapsulation: ViewEncapsulation.None
 })
+
 export class MainComponent implements OnInit {
+  shake: boolean = false;
   showFooterOnTop: boolean = false;
   dailyWord: string;
   nextGuess: Array<Guess> = [];
@@ -163,7 +179,7 @@ export class MainComponent implements OnInit {
     this.nextGuess[this.marker].letter = '';
     this.setMarker(this.marker - 1);
   }
-  isGuessComplete(): boolean {
+  private isGuessComplete(): boolean {
     for(let guess of this.nextGuess)
       if(!guess.letter) return false;
   }
@@ -192,7 +208,11 @@ export class MainComponent implements OnInit {
 
   enterClicked(): void {
     let typedLettersCount = this.gameService.countTypedLetters(this.nextGuess);
-    if(typedLettersCount < this.wordLength) return;
+    if(typedLettersCount < this.wordLength) {
+      this.shake = true;
+      setInterval(()=>{ this.shake = false; }, 0);
+      return;
+    }
     let currentGuess: string = this.nextGuess.map(guess => guess.letter).join('');
     if(!this.validWords.includes(currentGuess)) {
       this.handleNoWordDialog(currentGuess);
@@ -207,14 +227,15 @@ export class MainComponent implements OnInit {
     }
     //wrong guess
     if (!tmpWinFlag) {
-      this.resetNextGuess();
+      this.resetNextGuess();   
       return;
     }
     //correct guess
     this.handleWinDialog();
     if(!this.isRandomWord) this.updateLastWIn();
+    
     this.username = this.storageService.loadFromLocalStorage(USERNAME_KEY);
-    this.updateScoresInDB();
+    if(this.username) this.updateScoresInDB();
     //scroll to bottom to show correct guess
     document.querySelector('main.guesses').scrollTop = document.querySelector('main.guesses').scrollHeight;
   }
